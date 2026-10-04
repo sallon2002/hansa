@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>한국사 1급 문제 풀이</title>
+    <meta name="description" content="한국사능력검정 심화 출제 비중으로 섞어 내는 개념 객관식 문제 — 구석기부터 노무현 정부까지" />
+    <meta name="theme-color" content="#080809" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='32' fill='%23d6a44f'/%3E%3Ctext x='32' y='44' font-size='34' text-anchor='middle' fill='%231a1305' font-family='serif' font-weight='700'%3E%E5%8F%B2%3C/text%3E%3C/svg%3E"
+    />
+    <!-- 한글은 Pretendard, 영문·숫자는 Geist. 오프라인이면 시스템 폰트로 떨어진다 -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="ambient" aria-hidden="true">
+      <div class="orb orb-a"></div>
+      <div class="orb orb-b"></div>
+      <div class="orb orb-c"></div>
+    </div>
+
+    <div class="wrap">
+      <div class="nav-shell">
+        <header class="nav-pill">
+          <a class="brand" href="./" aria-label="한국사 1급 처음으로">
+            <span class="brand-mark" aria-hidden="true">史</span>
+            <span class="wordmark">한국사 1급</span>
+          </a>
+          <nav class="seg" role="tablist" aria-label="출제 방식">
+            <button class="tab tab-active" role="tab" aria-selected="true" data-mode="all">전체 랜덤</button>
+            <button class="tab" role="tab" aria-selected="false" data-mode="wrong">
+              오답 노트<span class="count num" id="wrongCount">0</span>
+            </button>
+          </nav>
+        </header>
+      </div>
+
+      <main>
+        <section class="hero fade-up">
+          <span class="eyebrow">Korean History · 1급</span>
+          <h1 class="headline">한 문제씩, 개념부터 단단하게</h1>
+          <p class="lead">
+            번호를 누르거나 클릭해서 고르고, <span class="kbd">Enter</span> 로 다음 문제. 틀리면 정답과 해설이 바로 옆에
+            뜹니다.
+          </p>
+        </section>
+
+        <div class="grid">
+          <!-- 문제 -->
+          <div class="panel fade-up" id="qPanel" style="--i: 1">
+            <div class="q-body">
+              <div class="q-meta">
+                <span class="chip chip-accent" id="eraChip">&nbsp;</span>
+                <span class="q-range" id="eraRange"></span>
+                <span class="chip chip-down hidden" id="wrongModeChip">오답 노트</span>
+                <span class="q-no num" id="qNo"></span>
+              </div>
+              <div class="q-head">
+                <h2 class="q-text" id="qText"></h2>
+                <span class="chip verdict hidden" id="verdict" role="status"></span>
+              </div>
+              <ol class="choices" id="choices"></ol>
+              <div class="q-foot">
+                <span class="hint"><span class="kbd">1</span>–<span class="kbd">4</span> 고르기</span>
+                <span class="hint"><span class="kbd">Enter</span> 다음 문제</span>
+                <button class="btn" id="nextBtn" disabled>
+                  다음 문제
+                  <span class="btn-ico" data-icon="arrow"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="side">
+            <!-- 해설: 틀렸을 때만 채운다 -->
+            <div class="panel panel-accent fade-up" id="explainPanel" style="--i: 2">
+              <div class="explain-body" id="explainBody" aria-live="polite"></div>
+            </div>
+
+            <!-- 기록 -->
+            <div class="panel fade-up" style="--i: 3">
+              <div class="stats-body">
+                <div class="stat-row">
+                  <div class="stat">
+                    <p class="stat-label">푼 문제</p>
+                    <p class="stat-value num" id="statSolved">0</p>
+                  </div>
+                  <div class="stat">
+                    <p class="stat-label">정답률</p>
+                    <p class="stat-value num" id="statRate">–</p>
+                  </div>
+                  <div class="stat">
+                    <p class="stat-label">연속 정답</p>
+                    <p class="stat-value num" id="statStreak">0</p>
+                    <p class="stat-sub num" id="statBest">최고 0</p>
+                  </div>
+                </div>
+                <div class="era-head">
+                  <p class="panel-title">시대별</p>
+                  <small>출제 비중 · 정답률</small>
+                </div>
+                <ul class="era-list" id="eraList"></ul>
+                <div class="stats-foot">
+                  <button class="btn btn-danger" id="resetBtn" disabled>
+                    <span data-icon="refresh"></span>
+                    기록 초기화
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <footer class="site-foot" id="siteFoot"></footer>
+    </div>
+
+    <div class="grain" aria-hidden="true"></div>
+
+    <!-- 문제 은행: 시대마다 파일 하나. 새 문제는 각 파일 맨 아래에 덧붙인다 -->
+    <script src="data/eras.js"></script>
+    <script src="data/prehistory.js"></script>
+    <script src="data/gojoseon.js"></script>
+    <script src="data/three.js"></script>
+    <script src="data/nambuk.js"></script>
+    <script src="data/goryeo.js"></script>
+    <script src="data/joseon1.js"></script>
+    <script src="data/joseon2.js"></script>
+    <script src="data/modern.js"></script>
+    <script src="data/colonial.js"></script>
+    <script src="data/contemporary.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

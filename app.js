@@ -9,12 +9,14 @@
   var TOTAL_WEIGHT = ERAS.reduce(function (s, e) { return s + e.weight; }, 0);
   var ERA_BY_ID = {};
   ERAS.forEach(function (e) { ERA_BY_ID[e.id] = e; });
+  var BANK_SIZE = ERAS.reduce(function (s, e) { return s + BANK[e.id].length; }, 0);
 
   var ICONS = {
     check: '<path d="m5 12 4.5 4.5L19 7"/>',
     close: '<path d="m6 6 12 12"/><path d="m18 6-12 12"/>',
     arrow: '<path d="M5 12h14"/><path d="m13 6 6 6-6 6"/>',
     refresh: '<path d="M20 12a8 8 0 1 1-2.34-5.66"/><path d="M20 4v5h-5"/>',
+    swap: '<path d="M4 8h13"/><path d="m14 4 4 4-4 4"/><path d="M20 16H7"/><path d="m10 12-4 4 4 4"/>',
   };
   function icon(name, size) {
     size = size || 16;
@@ -91,6 +93,12 @@
     if (mode === "wrong" && stats.wrong.length) {
       var pool = stats.wrong.length > 1 ? stats.wrong.filter(function (id) { return id !== prevId; }) : stats.wrong;
       return pool[Math.floor(Math.random() * pool.length)];
+    }
+    // 전체 랜덤에서도 오답 노트 문제가 아주 조금 더 자주 나온다: 다른 문제보다 약 1.2배.
+    // 티 나지 않게 한 번에 붙는 확률은 6% 를 넘지 않는다. 맞히면 choose() 가 노트에서 지운다
+    var wrongPool = stats.wrong.filter(function (id) { return id !== prevId; });
+    if (wrongPool.length && Math.random() < Math.min(0.06, (0.2 * wrongPool.length) / BANK_SIZE)) {
+      return wrongPool[Math.floor(Math.random() * wrongPool.length)];
     }
     var era = pickEra();
     var rows = BANK[era];
@@ -188,6 +196,89 @@
     btn.querySelector(".reset-label").textContent = "기록 초기화";
   }
 
+  // ---------- 기록 옮기기 ----------
+  // 서버가 없어서 기록은 기기마다 따로 남는다. 기록을 코드 한 줄로 바꿔 복사·붙여넣기로 옮긴다
+  var CODE_PREFIX = "HANSA1.";
+  function exportText() {
+    return CODE_PREFIX + btoa(unescape(encodeURIComponent(JSON.stringify(stats))));
+  }
+  function parseCode(text) {
+    var t = String(text || "").replace(/\s+/g, "");
+    if (t.indexOf(CODE_PREFIX) !== 0) return null;
+    try {
+      var s = JSON.parse(decodeURIComponent(escape(atob(t.slice(CODE_PREFIX.length)))));
+      if (typeof s !== "object" || !Array.isArray(s.wrong)) return null;
+      var out = Object.assign(emptyStats(), s);
+      out.wrong = out.wrong.filter(function (id) { return typeof id === "string" && !!rowOf(id); });
+      return out;
+    } catch (e) {
+      return null;
+    }
+  }
+  function moveMsg(text, ok) {
+    var m = $("moveMsg");
+    m.textContent = text;
+    m.className = "move-msg" + (ok === true ? " is-ok" : ok === false ? " is-bad" : "");
+  }
+  function toggleMove() {
+    var panel = $("movePanel");
+    var open = panel.classList.toggle("hidden") === false;
+    $("moveBtn").setAttribute("aria-expanded", open ? "true" : "false");
+    if (open) {
+      $("exportCode").value = exportText();
+      moveMsg("");
+    }
+  }
+  function copyCode() {
+    var box = $("exportCode");
+    box.value = exportText();
+    var fallback = function () {
+      box.focus();
+      box.select();
+      moveMsg("코드를 선택해 두었어요. 길게 눌러 복사하세요.");
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(box.value).then(function () {
+        moveMsg("복사했어요. 다른 기기의 「가져오기」 칸에 붙여 넣으세요.", true);
+      }, fallback);
+    } else fallback();
+  }
+  // 가져오기도 두 번 눌러야 바뀐다 — 이 기기 기록을 덮어쓰기 때문
+  var importArmed = null;
+  function importCode() {
+    var next = parseCode($("importCode").value);
+    var btn = $("importBtn");
+    if (!next) {
+      moveMsg("코드가 올바르지 않아요. 「HANSA1.」로 시작하는 코드 전체를 붙여 넣으세요.", false);
+      return;
+    }
+    if (!importArmed) {
+      btn.textContent = "한 번 더 누르면 바뀌어요";
+      btn.classList.add("is-armed");
+      moveMsg("가져올 기록: 푼 문제 " + next.solved + "개 · 오답 노트 " + next.wrong.length + "개");
+      importArmed = setTimeout(disarmImport, 4000);
+      return;
+    }
+    disarmImport();
+    stats = next;
+    saveStats();
+    $("importCode").value = "";
+    $("exportCode").value = exportText();
+    moveMsg("가져왔어요. 푼 문제 " + stats.solved + "개, 오답 노트 " + stats.wrong.length + "개.", true);
+    if (mode === "wrong" && !stats.wrong.length) {
+      mode = "all";
+      count--;
+      ask();
+    } else render();
+  }
+  function disarmImport() {
+    clearTimeout(importArmed);
+    importArmed = null;
+    var btn = $("importBtn");
+    btn.classList.remove("is-armed");
+    btn.textContent = "가져오기";
+  }
+
   // ---------- 그리기 ----------
   var choiceEls = [];
   function setup() {
@@ -215,6 +306,9 @@
     $("nextBtn").addEventListener("click", next);
     $("dockBtn").addEventListener("click", next);
     $("resetBtn").addEventListener("click", reset);
+    $("moveBtn").addEventListener("click", toggleMove);
+    $("copyBtn").addEventListener("click", copyCode);
+    $("importBtn").addEventListener("click", importCode);
 
     // 시대별 줄은 한 번만 만들고 숫자만 바꾼다
     $("eraList").innerHTML = ERAS.map(function (e) {

@@ -716,7 +716,9 @@ button:disabled {
 }
 .stats-foot {
   display: flex;
-  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: space-between;
   margin-top: 1.25rem;
   padding-top: 1rem;
   border-top: 1px solid var(--line);
@@ -967,4 +969,62 @@ button:disabled {
   color: var(--down);
   background: var(--down-soft);
   box-shadow: inset 0 0 0 1px var(--down-line);
+}
+
+/* 기록 옮기기 */
+.move {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+.move-step {
+  display: grid;
+  gap: 0.5rem;
+  justify-items: start;
+}
+.move-title {
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+.move-help {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+.move-code {
+  width: 100%;
+  min-width: 0;
+  resize: vertical;
+  padding: 0.5rem 0.625rem;
+  border: 0;
+  border-radius: 0.625rem;
+  font: 12px/1.5 ui-monospace, "SFMono-Regular", Consolas, monospace;
+  color: var(--text);
+  background: rgba(0, 0, 0, 0.35);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  word-break: break-all;
+}
+.move-code:focus {
+  outline: none;
+  box-shadow:
+    inset 0 0 0 1px var(--accent-line),
+    0 0 0 3px var(--accent-soft);
+}
+.move-code::placeholder {
+  color: var(--muted-2);
+}
+.move-msg {
+  min-height: 1.2em;
+  font-size: 12px;
+  color: var(--muted);
+}
+.move-msg.is-ok {
+  color: var(--up);
+}
+.move-msg.is-bad {
+  color: var(--down);
 }

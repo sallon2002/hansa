@@ -6,7 +6,9 @@
 ## 여는 법
 
 - **내 컴퓨터에서**: `index.html` 을 더블클릭하면 브라우저에서 바로 열린다. 설치할 것 없음.
-- **인터넷에 올리기**: 이 폴더 통째로(`index.html`, `styles.css`, `app.js`, `data/`) 아무 웹 호스팅에 올리면 된다.
+- **인터넷 주소**: https://sallon2002.github.io/hansa/ (GitHub Pages, 저장소 github.com/sallon2002/hansa).
+  고친 내용은 커밋 후 `git push` 하면 1~2분 뒤 이 주소에 반영된다.
+- **다른 곳에 올리기**: 이 폴더 통째로(`index.html`, `styles.css`, `app.js`, `data/`) 아무 웹 호스팅에 올리면 된다.
   서버 프로그램이 필요 없는 정적 사이트라 카페24 · GitHub Pages · Netlify 어디든 된다.
 
 ## 푸는 법

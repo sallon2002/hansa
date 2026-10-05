@@ -141,6 +141,16 @@
     ask();
     // 방금 클릭한 보기 자리에 포커스 테두리가 남으면 새 문제에서 미리 고른 것처럼 보인다
     if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
+    scrollToQuestion();
+  }
+
+  /** 휴대폰에서 아래로 내려 읽다가 넘기면, 새 문제가 화면 위에서 시작하게 문제 카드로 올려 준다 */
+  function scrollToQuestion() {
+    var navBottom = document.querySelector(".nav-shell").getBoundingClientRect().bottom;
+    var top = $("qPanel").getBoundingClientRect().top;
+    if (top >= navBottom && top < window.innerHeight * 0.4) return; // 이미 잘 보이는 위치
+    var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    window.scrollTo({ top: Math.max(0, window.scrollY + top - navBottom - 12), behavior: reduce ? "auto" : "smooth" });
   }
 
   function switchMode(m) {
@@ -186,6 +196,7 @@
       el.addEventListener("click", function () { switchMode(el.getAttribute("data-mode")); });
     });
     $("nextBtn").addEventListener("click", next);
+    $("dockBtn").addEventListener("click", next);
     $("resetBtn").addEventListener("click", reset);
 
     // 시대별 줄은 한 번만 만들고 숫자만 바꾼다
@@ -280,6 +291,10 @@
     var nb = $("nextBtn");
     nb.disabled = !answered;
     nb.classList.toggle("btn-primary", answered);
+    var dock = $("dock");
+    dock.classList.toggle("is-on", answered);
+    dock.setAttribute("aria-hidden", answered ? "false" : "true");
+    $("dockBtn").tabIndex = answered ? 0 : -1;
 
     // 기록
     $("statSolved").textContent = stats.solved;

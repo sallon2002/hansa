@@ -2,7 +2,7 @@
 <html lang="ko">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>한국사 1급 문제 풀이</title>
     <meta name="description" content="한국사능력검정 심화 출제 비중으로 섞어 내는 개념 객관식 문제 — 구석기부터 노무현 정부까지" />
     <meta name="theme-color" content="#080809" />
@@ -48,8 +48,10 @@
           <span class="eyebrow">Korean History · 1급</span>
           <h1 class="headline">한 문제씩, 개념부터 단단하게</h1>
           <p class="lead">
-            번호를 누르거나 클릭해서 고르면 보기마다 바로 밑에 설명이 붙습니다. 확인하고
-            <span class="kbd">Enter</span> 로 다음 문제.
+            <!-- 키보드가 있는 화면과 터치 화면에 맞는 안내를 하나씩만 보여 준다 -->
+            <span class="only-key">번호를 누르거나 클릭해서 고르면 보기마다 바로 밑에 설명이 붙습니다. 확인하고
+            <span class="kbd">Enter</span> 로 다음 문제.</span>
+            <span class="only-touch">보기를 누르면 바로 밑에 설명이 붙습니다. 확인하고 아래 <b>다음 문제</b> 버튼으로 넘어가세요.</span>
           </p>
         </section>
 
@@ -69,8 +71,8 @@
               </div>
               <ol class="choices" id="choices"></ol>
               <div class="q-foot">
-                <span class="hint"><span class="kbd">1</span>–<span class="kbd">4</span> 고르기</span>
-                <span class="hint"><span class="kbd">Enter</span> 다음 문제</span>
+                <span class="hint only-key"><span class="kbd">1</span>–<span class="kbd">4</span> 고르기</span>
+                <span class="hint only-key"><span class="kbd">Enter</span> 다음 문제</span>
                 <button class="btn" id="nextBtn" disabled>
                   다음 문제
                   <span class="btn-ico" data-icon="arrow"></span>
@@ -116,6 +118,14 @@
       </main>
 
       <footer class="site-foot" id="siteFoot"></footer>
+    </div>
+
+    <!-- 휴대폰·태블릿: 답을 고르면 화면 아래에 붙어 나오는 다음 문제 버튼 -->
+    <div class="dock" id="dock" aria-hidden="true">
+      <button class="btn btn-primary dock-btn" id="dockBtn" tabindex="-1">
+        다음 문제
+        <span class="btn-ico" data-icon="arrow"></span>
+      </button>
     </div>
 
     <div class="grain" aria-hidden="true"></div>

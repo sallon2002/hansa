@@ -1,5 +1,5 @@
 // 문제 은행 형식 검사: node tools/check.js [시대id ...]
-// 한 줄이 [문제, 정답, 오답, 오답, 오답, 해설] 6칸인지, 보기가 겹치지 않는지, 문제가 중복되지 않는지 본다.
+// 한 줄이 [문제, 정답, 오답, 오답, 오답, 해설] 6칸(+ 오답 풀이 3칸)인지, 보기가 겹치지 않는지, 문제가 중복되지 않는지 본다.
 const path = require("path");
 global.window = {};
 require(path.join(__dirname, "../data/eras.js"));
@@ -22,7 +22,8 @@ for (const id of ids) {
   if (!rows) { console.log(`없는 시대: ${id}`); bad++; continue; }
   rows.forEach((r, i) => {
     const errs = [];
-    if (!Array.isArray(r) || r.length !== 6) errs.push(`칸 수 ${r && r.length}`);
+    // 6칸 = 문제·보기·해설, 9칸 = 거기에 오답 1~3의 풀이까지
+    if (!Array.isArray(r) || (r.length !== 6 && r.length !== 9)) errs.push(`칸 수 ${r && r.length}`);
     else {
       if (r.some((x) => typeof x !== "string" || !x.trim())) errs.push("빈 칸");
       if (new Set(r.slice(1, 5).map((x) => x.trim())).size !== 4) errs.push("보기 중복");

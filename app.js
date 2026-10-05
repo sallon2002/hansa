@@ -67,12 +67,16 @@
     var p = id.split(":");
     return BANK[p[0]] && BANK[p[0]][Number(p[1])];
   }
-  /** 보기는 낼 때마다 새로 섞는다. 정답은 데이터에서 늘 두 번째 칸 */
+  /** 보기는 낼 때마다 새로 섞는다. 정답은 데이터에서 늘 두 번째 칸, 7~9번째 칸은 오답 1~3의 풀이 */
   function build(id) {
     var row = rowOf(id);
     if (!row) return null;
     var choices = shuffle([row[1], row[2], row[3], row[4]]);
-    return { id: id, era: id.split(":")[0], q: row[0], choices: choices, answer: choices.indexOf(row[1]), explain: row[5] };
+    var notes = {};
+    notes[row[2]] = row[6] || "";
+    notes[row[3]] = row[7] || "";
+    notes[row[4]] = row[8] || "";
+    return { id: id, era: id.split(":")[0], q: row[0], choices: choices, answer: choices.indexOf(row[1]), explain: row[5], notes: notes };
   }
   /** 출제 비중대로 시대를 하나 고른다 */
   function pickEra() {
@@ -218,6 +222,28 @@
     });
   }
 
+  /** 오답 풀이: 화면에 나온 보기 순서대로, 내가 고른 오답을 맨 위에 강조 */
+  function wrongNotes(q) {
+    var order = [];
+    q.choices.forEach(function (c, i) { if (i !== q.answer) order.push(i); });
+    order.sort(function (a, b) { return (a === picked ? -1 : 0) - (b === picked ? -1 : 0) || a - b; });
+    var items = order.map(function (i) {
+      var c = q.choices[i];
+      var note = q.notes[c] || "";
+      // 풀이는 "보기 — 설명" 꼴이라 앞쪽 보기 이름은 떼고 보여 준다
+      var dash = note.indexOf(" — ");
+      if (dash >= 0) note = note.slice(dash + 3);
+      return (
+        '<li class="wn' + (i === picked ? " is-mine" : "") + '">' +
+        '<p class="wn-head"><span class="num">' + NUMS[i] + "</span> " + esc(c) +
+        (i === picked ? '<span class="chip chip-down wn-tag">내가 고른 답</span>' : "") + "</p>" +
+        (note ? '<p class="wn-text">' + esc(note) + "</p>" : "") +
+        "</li>"
+      );
+    });
+    return '<p class="explain-label wn-title">오답 풀이</p><ul class="wn-list">' + items.join("") + "</ul>";
+  }
+
   function render() {
     var q = current;
     var answered = picked !== null;
@@ -279,7 +305,7 @@
         '<p class="explain-label">정답</p>' +
         '<p class="explain-answer"><span class="num">' + NUMS[q.answer] + "</span>" + esc(q.choices[q.answer]) + "</p>" +
         '<p class="explain-text">' + esc(q.explain) + "</p>" +
-        '<p class="explain-mine">내가 고른 답 <span class="num">' + NUMS[picked] + "</span> <s>" + esc(q.choices[picked]) + "</s></p>" +
+        wrongNotes(q) +
         "</div>";
     } else {
       body.innerHTML =

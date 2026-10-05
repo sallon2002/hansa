@@ -6,8 +6,6 @@
 ## 여는 법
 
 - **내 컴퓨터에서**: `index.html` 을 더블클릭하면 브라우저에서 바로 열린다. 설치할 것 없음.
-- **휴대폰·아이패드에서**: https://claude.ai/artifact/7RhCBFCMyfk7HikbdNxAGN (claude.ai 로그인한 본인만 열림, 공유는 페이지의 Share 메뉴).
-  고친 내용을 여기에 반영하려면 `node tools/build-artifact.js <폴더>` 로 사본을 만들어 같은 주소에 다시 올린다.
 - **인터넷에 올리기**: 이 폴더 통째로(`index.html`, `styles.css`, `app.js`, `data/`) 아무 웹 호스팅에 올리면 된다.
   서버 프로그램이 필요 없는 정적 사이트라 카페24 · GitHub Pages · Netlify 어디든 된다.
 

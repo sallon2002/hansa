@@ -160,8 +160,18 @@
     ask();
   }
 
+  // 기록 초기화는 두 번 눌러야 지워진다. 브라우저 확인 창(confirm)은 막힌 환경이 있어 화면 안에서 묻는다
+  var resetArmed = null;
   function reset() {
-    if (!confirm("푼 기록과 오답 노트를 모두 지울까요?")) return;
+    var btn = $("resetBtn");
+    var label = btn.querySelector(".reset-label");
+    if (!resetArmed) {
+      label.textContent = "한 번 더 누르면 지워져요";
+      btn.classList.add("is-armed");
+      resetArmed = setTimeout(disarmReset, 3000);
+      return;
+    }
+    disarmReset();
     stats = emptyStats();
     saveStats();
     if (mode === "wrong") {
@@ -169,6 +179,13 @@
       count--;
       ask();
     } else render();
+  }
+  function disarmReset() {
+    clearTimeout(resetArmed);
+    resetArmed = null;
+    var btn = $("resetBtn");
+    btn.classList.remove("is-armed");
+    btn.querySelector(".reset-label").textContent = "기록 초기화";
   }
 
   // ---------- 그리기 ----------

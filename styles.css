@@ -25,8 +25,10 @@
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
   --radius: 1.25rem;
   --bezel: 5px;
-  --sans: "Pretendard Variable", "Pretendard", system-ui, -apple-system, "Malgun Gothic", sans-serif;
-  --display: "Geist", "Pretendard Variable", system-ui, sans-serif;
+  --sans: "Pretendard Variable", "Pretendard", "Noto Sans KR", system-ui, -apple-system, "Malgun Gothic", sans-serif;
+  --display: "Geist", "Pretendard Variable", "Noto Sans KR", system-ui, sans-serif;
+  /* 한 가지 어두운 화면으로만 디자인했다 — 스크롤바·입력창도 어둡게 */
+  color-scheme: dark;
 }
 
 *,
@@ -152,7 +154,7 @@ button:disabled {
 /* ---------- 플로팅 내비 ---------- */
 .nav-shell {
   position: sticky;
-  top: 0.75rem;
+  top: calc(env(safe-area-inset-top, 0px) + 0.75rem);
   z-index: 40;
 }
 .nav-pill {
@@ -846,8 +848,8 @@ button:disabled {
 /* 휴대폰 */
 @media (max-width: 639px) {
   .wrap {
-    padding-left: 0.75rem;
-    padding-right: 0.75rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
   .nav-pill {
     padding: 0.375rem 0.5rem;
@@ -957,4 +959,11 @@ button:disabled {
     margin-top: 1rem;
     padding-top: 0.75rem;
   }
+}
+
+/* 기록 초기화: 한 번 누르면 확인 상태로 붉게 */
+.btn.is-armed {
+  color: var(--down);
+  background: var(--down-soft);
+  box-shadow: inset 0 0 0 1px var(--down-line);
 }

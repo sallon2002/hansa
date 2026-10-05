@@ -136,7 +136,8 @@ button:disabled {
   z-index: 10;
   max-width: 80rem;
   margin: 0 auto;
-  padding: 0.75rem 1rem 4rem;
+  /* 앱으로 열면 상태 표시줄(시계·배터리)이 화면 위에 겹치므로 그만큼 내려서 시작한다 */
+  padding: calc(env(safe-area-inset-top, 0px) + 0.75rem) 1rem 4rem;
 }
 @media (min-width: 640px) {
   .wrap {

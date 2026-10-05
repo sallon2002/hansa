@@ -300,16 +300,6 @@ button:disabled {
     inset 0 0 0 1px rgba(255, 255, 255, 0.03);
   pointer-events: none;
 }
-.panel-accent::before {
-  content: "";
-  position: absolute;
-  inset: 0 0 auto 0;
-  height: 56px;
-  border-radius: calc(var(--radius) - var(--bezel)) calc(var(--radius) - var(--bezel)) 0 0;
-  background: linear-gradient(180deg, color-mix(in srgb, var(--c, var(--accent)) 14%, transparent), transparent);
-  pointer-events: none;
-  transition: background 0.5s var(--ease);
-}
 .panel.is-ok {
   box-shadow:
     0 0 0 1px var(--up-line),
@@ -400,7 +390,7 @@ button:disabled {
 }
 .choice {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 0.875rem;
   width: 100%;
   padding: 0.875rem 1rem;
@@ -423,8 +413,30 @@ button:disabled {
 .answered .choice:hover {
   background: none;
 }
-.choice-text {
+.choice-body {
+  display: flex;
   flex: 1;
+  min-width: 0;
+  flex-direction: column;
+  padding-top: 0.125rem;
+}
+/* 고르기 전에는 숨어 있다가, 고르는 순간 네 보기 모두에 설명이 붙는다 */
+.choice-note {
+  display: none;
+  margin-top: 0.375rem;
+  font-size: 13.5px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+.answered .choice-note:not(:empty) {
+  display: block;
+  animation: pop 0.45s var(--ease) both;
+}
+.choice.is-answer .choice-note {
+  color: rgba(241, 240, 236, 0.88);
+}
+.choice.is-wrong .choice-note {
+  color: rgba(241, 240, 236, 0.82);
 }
 .badge {
   display: flex;
@@ -444,6 +456,7 @@ button:disabled {
 }
 .choice-ico {
   display: none;
+  margin-top: 0.2rem;
 }
 .choice.is-answer,
 .answered .choice.is-answer:hover {
@@ -475,8 +488,9 @@ button:disabled {
 .choice-ico.bad {
   color: var(--down);
 }
-.choice.is-dim {
-  opacity: 0.45;
+.choice.is-dim .badge,
+.choice.is-dim .choice-text {
+  opacity: 0.55;
 }
 
 .q-foot {
@@ -601,112 +615,6 @@ button:disabled {
   color: var(--down);
   background: var(--down-soft);
   box-shadow: inset 0 0 0 1px rgba(217, 133, 144, 0.28);
-}
-
-/* ---------- 해설 ---------- */
-.explain-body {
-  position: relative;
-  min-height: 12.5rem;
-  padding: 1.25rem;
-}
-@media (min-width: 640px) {
-  .explain-body {
-    padding: 1.5rem;
-  }
-}
-.explain-title {
-  color: var(--down);
-}
-.explain-label {
-  margin-top: 0.75rem;
-  font-size: 0.75rem;
-  color: var(--muted);
-}
-.explain-answer {
-  margin-top: 0.25rem;
-  font-size: 1.5rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  color: var(--up);
-}
-.explain-answer .num {
-  margin-right: 0.375rem;
-}
-.explain-text {
-  margin-top: 1rem;
-  font-size: 14.5px;
-  line-height: 1.85;
-  color: rgba(241, 240, 236, 0.92);
-}
-/* 오답 풀이 — 내가 고른 오답을 맨 위에, 붉은 테두리로 */
-.wn-title {
-  margin-top: 1.25rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--line);
-}
-.wn-list {
-  display: grid;
-  gap: 0.5rem;
-  margin-top: 0.5rem;
-}
-.wn {
-  padding: 0.625rem 0.75rem;
-  border-radius: 0.75rem;
-  background: rgba(255, 255, 255, 0.025);
-  box-shadow: inset 0 0 0 1px var(--line);
-}
-.wn.is-mine {
-  background: var(--down-soft);
-  box-shadow: inset 0 0 0 1px rgba(217, 133, 144, 0.3);
-}
-.wn-head {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.375rem;
-  font-size: 0.8125rem;
-  font-weight: 600;
-  color: var(--text);
-}
-.wn:not(.is-mine) .wn-head {
-  color: rgba(241, 240, 236, 0.8);
-}
-.wn-tag {
-  margin-left: auto;
-  font-size: 0.65rem;
-}
-.wn-text {
-  margin-top: 0.25rem;
-  font-size: 13px;
-  line-height: 1.7;
-  color: var(--muted);
-}
-.placeholder {
-  display: flex;
-  min-height: 10rem;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  text-align: center;
-  font-size: 0.875rem;
-  color: var(--muted);
-}
-.placeholder-ico {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 999px;
-  color: var(--muted-2);
-  background: rgba(255, 255, 255, 0.04);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.07);
-}
-.placeholder.is-ok .placeholder-ico {
-  color: var(--up);
-  background: var(--up-soft);
-  box-shadow: inset 0 0 0 1px rgba(127, 197, 154, 0.3);
 }
 
 /* ---------- 기록 ---------- */

@@ -6,7 +6,6 @@
   var ERAS = window.ERAS;
   var BANK = window.BANK;
   var STORE_KEY = "hansa1-v1";
-  var NUMS = ["①", "②", "③", "④"];
   var TOTAL_WEIGHT = ERAS.reduce(function (s, e) { return s + e.weight; }, 0);
   var ERA_BY_ID = {};
   ERAS.forEach(function (e) { ERA_BY_ID[e.id] = e; });
@@ -16,7 +15,6 @@
     close: '<path d="m6 6 12 12"/><path d="m18 6-12 12"/>',
     arrow: '<path d="M5 12h14"/><path d="m13 6 6 6-6 6"/>',
     refresh: '<path d="M20 12a8 8 0 1 1-2.34-5.66"/><path d="M20 4v5h-5"/>',
-    spark: '<path d="M12 3v4M12 17v4M3 12h4M17 12h4"/><path d="M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8Z"/>',
   };
   function icon(name, size) {
     size = size || 16;
@@ -173,7 +171,8 @@
       b.type = "button";
       b.className = "choice";
       b.innerHTML =
-        '<span class="badge num">' + (i + 1) + '</span><span class="choice-text"></span>' +
+        '<span class="badge num">' + (i + 1) + '</span>' +
+        '<span class="choice-body"><span class="choice-text"></span><span class="choice-note"></span></span>' +
         '<span class="choice-ico ok">' + icon("check", 18) + '</span><span class="choice-ico bad">' + icon("close", 18) + "</span>";
       b.addEventListener("click", choose.bind(null, i));
       li.appendChild(b);
@@ -222,26 +221,12 @@
     });
   }
 
-  /** 오답 풀이: 화면에 나온 보기 순서대로, 내가 고른 오답을 맨 위에 강조 */
-  function wrongNotes(q) {
-    var order = [];
-    q.choices.forEach(function (c, i) { if (i !== q.answer) order.push(i); });
-    order.sort(function (a, b) { return (a === picked ? -1 : 0) - (b === picked ? -1 : 0) || a - b; });
-    var items = order.map(function (i) {
-      var c = q.choices[i];
-      var note = q.notes[c] || "";
-      // 풀이는 "보기 — 설명" 꼴이라 앞쪽 보기 이름은 떼고 보여 준다
-      var dash = note.indexOf(" — ");
-      if (dash >= 0) note = note.slice(dash + 3);
-      return (
-        '<li class="wn' + (i === picked ? " is-mine" : "") + '">' +
-        '<p class="wn-head"><span class="num">' + NUMS[i] + "</span> " + esc(c) +
-        (i === picked ? '<span class="chip chip-down wn-tag">내가 고른 답</span>' : "") + "</p>" +
-        (note ? '<p class="wn-text">' + esc(note) + "</p>" : "") +
-        "</li>"
-      );
-    });
-    return '<p class="explain-label wn-title">오답 풀이</p><ul class="wn-list">' + items.join("") + "</ul>";
+  /** 보기 밑에 붙일 설명: 정답이면 해설, 오답이면 그 보기의 풀이("보기 — 설명"에서 설명만) */
+  function noteFor(q, i) {
+    if (i === q.answer) return q.explain;
+    var note = q.notes[q.choices[i]] || "";
+    var dash = note.indexOf(" — ");
+    return dash >= 0 ? note.slice(dash + 3) : note;
   }
 
   function render() {
@@ -283,6 +268,8 @@
       var isAnswer = answered && i === q.answer;
       var isWrong = answered && i === picked && !isAnswer;
       b.querySelector(".choice-text").textContent = q.choices[i];
+      // 고르는 순간 네 보기 모두 밑에 설명이 붙는다 — 아래로 내려 볼 필요 없이 바로 확인하고 넘어가게
+      b.querySelector(".choice-note").textContent = answered ? noteFor(q, i) : "";
       b.classList.toggle("is-answer", isAnswer);
       b.classList.toggle("is-wrong", isWrong);
       b.classList.toggle("is-dim", answered && !isAnswer && !isWrong);
@@ -293,26 +280,6 @@
     var nb = $("nextBtn");
     nb.disabled = !answered;
     nb.classList.toggle("btn-primary", answered);
-
-    // 해설: 틀렸을 때만. 맞혔으면 체크 표시만 남긴다
-    var ep = $("explainPanel");
-    ep.style.setProperty("--c", answered && !right ? "var(--down)" : "var(--accent)");
-    var body = $("explainBody");
-    if (answered && !right) {
-      body.innerHTML =
-        '<div class="pop">' +
-        '<p class="panel-title explain-title">해설</p>' +
-        '<p class="explain-label">정답</p>' +
-        '<p class="explain-answer"><span class="num">' + NUMS[q.answer] + "</span>" + esc(q.choices[q.answer]) + "</p>" +
-        '<p class="explain-text">' + esc(q.explain) + "</p>" +
-        wrongNotes(q) +
-        "</div>";
-    } else {
-      body.innerHTML =
-        '<div class="placeholder' + (right ? " is-ok pop" : "") + '">' +
-        '<span class="placeholder-ico">' + icon(right ? "check" : "spark", 18) + "</span>" +
-        "<p>" + (right ? "맞혔어요. Enter 로 다음 문제" : "틀리면 여기에 정답과 해설이 나옵니다") + "</p></div>";
-    }
 
     // 기록
     $("statSolved").textContent = stats.solved;

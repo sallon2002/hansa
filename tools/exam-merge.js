@@ -1,4 +1,5 @@
 // 실전 문제 작업 파일(work/exam/*.json)을 시대별 data/exam/<시대>.js 로 합친다.
+// ⚠ 처음 한 번 전체를 만들 때만 쓴다. 이미 검증 수정이 반영된 뒤에 돌리면 수정이 사라진다 — 새 문제는 exam-append.js 로.
 //   node tools/exam-merge.js
 // 파일 이름 순서대로 읽어 각 문제의 era 에 따라 나눠 담는다. 시대 파일은 열 개 모두 다시 쓴다.
 const fs = require("fs");

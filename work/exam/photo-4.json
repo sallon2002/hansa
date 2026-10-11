@@ -1,0 +1,314 @@
+{
+  "questions": [
+    {
+      "era": "colonial",
+      "points": 2,
+      "source": {
+        "kind": "사진",
+        "title": "(가) 건물",
+        "text": "1926년 경복궁 안의 전각을 헐어 낸 자리에 완공되었다.",
+        "image": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/57/Japanese_General_Government_Building.jpg/960px-Japanese_General_Government_Building.jpg",
+          "alt": "중앙에 돔을 얹은 대형 석조 관청 건물의 옛 사진",
+          "credit": "門田房太郞 · Public domain",
+          "page": "https://commons.wikimedia.org/wiki/File:Japanese_General_Government_Building.jpg"
+        }
+      },
+      "stem": "(가) 건물이 완공된 1920년대 일제의 정책으로 옳은 것은?",
+      "choices": [
+        "조선 태형령을 제정하여 한국인에게 태형을 가하였다.",
+        "국가 총동원법을 적용하여 인력과 물자를 수탈하였다.",
+        "치안 유지법을 제정하여 사회주의 운동 등을 탄압하였다.",
+        "토지 조사령을 공포하여 토지 소유자에게 신고하게 하였다.",
+        "황국 신민 서사의 암송을 강요하였다."
+      ],
+      "answer": 2,
+      "notes": [
+        "조선 태형령은 1912년 무단 통치 시기에 제정되었다.",
+        "국가 총동원법은 1938년 민족 말살 통치 시기에 제정·적용되었다.",
+        "자료는 1926년 완공된 조선 총독부 청사로, 1920년대 이른바 문화 통치 시기인 1925년 일제는 치안 유지법을 제정해 사회주의자와 독립운동가를 탄압하였다.",
+        "토지 조사령은 1912년 토지 조사 사업을 위해 공포되었다.",
+        "황국 신민 서사 암송은 1937년부터 강요되었다."
+      ]
+    },
+    {
+      "era": "colonial",
+      "points": 2,
+      "source": {
+        "kind": "사진",
+        "title": "(가) 회사의 경성 본사",
+        "text": "1908년 설립되어 식민지 토지 수탈에 앞장선 국책 회사이다.",
+        "image": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/7/7f/Oriental_Development_Company.JPG",
+          "alt": "돔 지붕을 얹은 2층 서양식 건물과 앞 거리를 지나는 사람들의 옛 사진",
+          "credit": "작자 미상 · Public domain",
+          "page": "https://commons.wikimedia.org/wiki/File:Oriental_Development_Company.JPG"
+        }
+      },
+      "stem": "(가) 회사에 대한 설명으로 옳은 것은?",
+      "choices": [
+        "1926년 의열단원 나석주가 폭탄을 던진 곳이다.",
+        "1921년 의열단원 김익상이 폭탄을 던진 곳이다.",
+        "1923년 의열단원 김상옥이 폭탄을 던진 곳이다.",
+        "1920년 의열단원 박재혁이 폭탄을 던진 곳이다.",
+        "1920년 의열단원 최수봉이 폭탄을 던진 곳이다."
+      ],
+      "answer": 0,
+      "notes": [
+        "자료는 동양 척식 주식회사로, 1926년 의열단원 나석주가 조선 식산 은행과 함께 이곳에 폭탄을 던졌다.",
+        "김익상은 1921년 조선 총독부에 폭탄을 던졌다.",
+        "김상옥은 1923년 종로 경찰서에 폭탄을 던졌다.",
+        "박재혁은 1920년 부산 경찰서에 폭탄을 던졌다.",
+        "최수봉은 1920년 밀양 경찰서에 폭탄을 던졌다."
+      ]
+    },
+    {
+      "era": "colonial",
+      "points": 2,
+      "source": {
+        "kind": "사진",
+        "title": "다음 사진",
+        "text": "1919년 3월, 서울의 거리를 가득 메운 군중이다.",
+        "image": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a8/L%E2%80%99Ind%C3%A9pendance_de_la_Cor%C3%A9e_et_la_Paix-02.jpg/960px-L%E2%80%99Ind%C3%A9pendance_de_la_Cor%C3%A9e_et_la_Paix-02.jpg",
+          "alt": "흰옷을 입은 수많은 사람들이 담장 앞 넓은 거리에 모여 있는 흑백 사진",
+          "credit": "Bureau d'information coréen · Public domain",
+          "page": "https://commons.wikimedia.org/wiki/File:L’Indépendance_de_la_Corée_et_la_Paix-02.jpg"
+        }
+      },
+      "stem": "다음 사진의 민족 운동에 대한 설명으로 옳은 것은?",
+      "choices": [
+        "신간회가 진상 조사단을 파견하였다.",
+        "순종의 인산일을 계기로 일어났다.",
+        "백정에 대한 차별 철폐를 목표로 하였다.",
+        "나랏빚을 갚기 위한 모금 운동으로 전개되었다.",
+        "대한민국 임시 정부가 수립되는 계기가 되었다."
+      ],
+      "answer": 4,
+      "notes": [
+        "신간회는 1929년 광주 학생 항일 운동에 진상 조사단을 파견하였다.",
+        "순종의 인산일을 계기로 일어난 것은 1926년 6·10 만세 운동이다.",
+        "백정 차별 철폐를 내건 것은 1923년 조선 형평사가 시작한 형평 운동이다.",
+        "나랏빚을 갚기 위한 모금 운동은 1907년 국채 보상 운동이다.",
+        "자료는 1919년 3·1 운동으로, 이를 계기로 독립운동을 체계적으로 이끌 대한민국 임시 정부가 상하이에서 수립되었다."
+      ]
+    },
+    {
+      "era": "colonial",
+      "points": 1,
+      "source": {
+        "kind": "사진",
+        "title": "다음 사진",
+        "text": "1936년 8월, 독일 베를린에서 열린 마라톤 경기의 시상식이다.",
+        "image": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/75/Sohn_Kee-chung_%28Kitei_Son%29_Medal_Ceremony_1936_Summer_Olympics.jpg/960px-Sohn_Kee-chung_%28Kitei_Son%29_Medal_Ceremony_1936_Summer_Olympics.jpg",
+          "alt": "월계관을 쓰고 묘목 화분을 든 운동복 차림의 선수 흑백 사진",
+          "credit": "Japanese / German press (1936) · Public domain",
+          "page": "https://commons.wikimedia.org/wiki/File:Sohn_Kee-chung_(Kitei_Son)_Medal_Ceremony_1936_Summer_Olympics.jpg"
+        }
+      },
+      "stem": "사진 속 인물이 우승한 해에 일어난 사실로 옳은 것은?",
+      "choices": [
+        "신간회가 해소되었다.",
+        "우승자 사진의 일장기를 지워 보도한 신문이 무기 정간되었다.",
+        "조선어 학회 회원들이 대거 체포되었다.",
+        "국가 총동원법이 공포되었다.",
+        "원산 노동자 총파업이 일어났다."
+      ],
+      "answer": 1,
+      "notes": [
+        "신간회는 1931년 해소되었다.",
+        "자료는 1936년 베를린 올림픽 마라톤에서 우승한 손기정으로, 같은 해 『동아일보』가 그의 사진에서 일장기를 지워 보도했다가 무기 정간되었다.",
+        "조선어 학회 사건은 1942년에 일어났다.",
+        "국가 총동원법은 1938년에 공포되었다.",
+        "원산 노동자 총파업은 1929년에 일어났다."
+      ]
+    },
+    {
+      "era": "colonial",
+      "points": 2,
+      "source": {
+        "kind": "사진",
+        "title": "다음 사진",
+        "text": "1932년 4월, 상하이에서 태극기를 배경으로 촬영하였다.",
+        "image": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cd/%EC%82%AC%EC%A7%842%28%EA%B9%80%EA%B5%AC%EC%84%A0%EC%83%9D%EA%B3%BC_%EC%9C%A4%EB%B4%89%EA%B8%B8%29.jpg/960px-%EC%82%AC%EC%A7%842%28%EA%B9%80%EA%B5%AC%EC%84%A0%EC%83%9D%EA%B3%BC_%EC%9C%A4%EB%B4%89%EA%B8%B8%29.jpg",
+          "alt": "태극기 앞에서 양복 차림으로 앉은 중년 남성과 서 있는 젊은 남성의 흑백 사진",
+          "credit": "작자 미상(1932) · CC BY-SA 4.0",
+          "page": "https://commons.wikimedia.org/wiki/File:사진2(김구선생과_윤봉길).jpg"
+        }
+      },
+      "stem": "사진 속 두 인물이 소속된 단체의 활동으로 옳은 것은?",
+      "choices": [
+        "조선 혁명 선언을 활동 지침으로 삼았다.",
+        "105인 사건으로 조직이 와해되었다.",
+        "쌍성보 전투에서 일본군을 격파하였다.",
+        "단원 이봉창이 도쿄에서 일왕을 향해 폭탄을 던졌다.",
+        "영릉가 전투에서 일본군에 승리하였다."
+      ],
+      "answer": 3,
+      "notes": [
+        "조선 혁명 선언(1923, 신채호)은 의열단의 활동 지침이다.",
+        "105인 사건(1911)으로 와해된 단체는 신민회이다.",
+        "쌍성보 전투(1932)는 지청천이 이끈 한국 독립군의 승리이다.",
+        "자료는 김구와 윤봉길로, 두 사람이 속한 한인 애국단의 단원 이봉창은 1932년 1월 도쿄에서 일왕을 향해 폭탄을 던졌다.",
+        "영릉가 전투(1932)는 양세봉이 이끈 조선 혁명군의 승리이다."
+      ]
+    },
+    {
+      "era": "colonial",
+      "points": 2,
+      "source": {
+        "kind": "사진",
+        "title": "다음 사진",
+        "text": "1942년 무렵, 중국에서 훈련을 마치고 환호하는 부대원들이다.",
+        "image": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ee/Korean_Liberation_Army_after_a_training_exercise.png/960px-Korean_Liberation_Army_after_a_training_exercise.png",
+          "alt": "언덕 위에서 소총을 높이 들고 환호하는 군복 차림의 대원들 흑백 사진",
+          "credit": "Provisional Government of the Republic of Korea · Public domain",
+          "page": "https://commons.wikimedia.org/wiki/File:Korean_Liberation_Army_after_a_training_exercise.png"
+        }
+      },
+      "stem": "사진 속 부대에 대한 설명으로 옳은 것은?",
+      "choices": [
+        "미국 전략 정보국(OSS)과 협력하여 국내 진공 작전을 준비하였다.",
+        "청산리 일대에서 일본군을 크게 물리쳤다.",
+        "중국 관내에서 결성된 최초의 한인 무장 부대이다.",
+        "조선 독립 동맹의 군사 조직으로 화북 지역에서 활동하였다.",
+        "자유시 참변으로 큰 타격을 입었다."
+      ],
+      "answer": 0,
+      "notes": [
+        "자료는 대한민국 임시 정부의 정규군인 한국광복군으로, 미국 전략 정보국(OSS)과 협력해 국내 진공 작전을 준비하였다.",
+        "청산리 전투(1920)는 김좌진의 북로 군정서 등이 거둔 승리이다.",
+        "중국 관내 최초의 한인 무장 부대는 1938년 김원봉이 결성한 조선 의용대이다.",
+        "조선 독립 동맹의 군사 조직으로 화북에서 활동한 부대는 조선 의용군이다.",
+        "자유시 참변(1921)으로 타격을 입은 것은 대한 독립 군단 등 만주의 독립군이다."
+      ]
+    },
+    {
+      "era": "contemporary",
+      "points": 2,
+      "source": {
+        "kind": "사진",
+        "title": "다음 사진",
+        "text": "1950년 12월, 함경남도의 항구에서 배에 오른 피란민들이다.",
+        "image": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/35/Refugees_during_the_Hungnam_evacuation%2C_1950.jpg/960px-Refugees_during_the_Hungnam_evacuation%2C_1950.jpg",
+          "alt": "짐 보따리를 든 피란민들이 화물선 갑판을 빽빽하게 메운 흑백 사진",
+          "credit": "USN · Public domain",
+          "page": "https://commons.wikimedia.org/wiki/File:Refugees_during_the_Hungnam_evacuation,_1950.jpg"
+        }
+      },
+      "stem": "다음 사진의 장면이 있었던 전쟁 중에 일어난 사실로 옳은 것은?",
+      "choices": [
+        "여수·순천 10·19 사건이 일어났다.",
+        "제주 4·3 사건이 일어났다.",
+        "이승만 정부가 반공 포로를 석방하였다.",
+        "한·미 상호 방위 조약이 체결되었다.",
+        "진보당 사건으로 조봉암이 체포되었다."
+      ],
+      "answer": 2,
+      "notes": [
+        "여수·순천 10·19 사건은 전쟁 이전인 1948년에 일어났다.",
+        "제주 4·3 사건은 전쟁 이전인 1948년에 일어났다.",
+        "자료는 6·25 전쟁 중의 흥남 철수(1950)로, 전쟁 중인 1953년 6월 이승만 정부는 휴전에 반대하며 반공 포로를 석방하였다.",
+        "한·미 상호 방위 조약은 정전 협정(1953. 7.) 이후인 1953년 10월에 체결되었다.",
+        "진보당 사건은 1958년에 일어났다."
+      ]
+    },
+    {
+      "era": "contemporary",
+      "points": 2,
+      "source": {
+        "kind": "사진",
+        "title": "다음 사진",
+        "text": "1960년 4월, 현수막을 들고 서울 도심을 행진하는 학생과 시민들이다.",
+        "image": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/8/8a/4.19_%ED%98%81%EB%AA%85.jpg",
+          "alt": "현수막을 앞세운 학생과 시민들이 도심 큰길을 행진하는 흑백 사진",
+          "credit": "작자 미상 · Public domain",
+          "page": "https://commons.wikimedia.org/wiki/File:4.19_혁명.jpg"
+        }
+      },
+      "stem": "다음 사진의 민주화 운동이 가져온 결과로 옳은 것은?",
+      "choices": [
+        "6·29 선언으로 대통령 직선제 개헌이 이루어졌다.",
+        "계엄군의 진압에 맞서 시민군이 조직되었다.",
+        "유신 체제가 무너지는 계기가 되었다.",
+        "한·일 회담 반대 시위로 비상계엄이 선포되었다.",
+        "허정 과도 정부가 구성되고 내각 책임제 개헌이 이루어졌다."
+      ],
+      "answer": 4,
+      "notes": [
+        "6·29 선언과 대통령 직선제 개헌은 1987년 6월 민주 항쟁의 결과이다.",
+        "시민군 조직은 1980년 5·18 민주화 운동 때의 일이다.",
+        "유신 체제 붕괴의 계기가 된 것은 1979년 부마 민주 항쟁이다.",
+        "한·일 회담 반대 시위(6·3 시위)로 1964년 비상계엄이 선포되었다.",
+        "자료는 1960년 4·19 혁명으로, 이승만 대통령이 물러난 뒤 허정 과도 정부가 구성되고 내각 책임제·양원제 개헌이 이루어졌다."
+      ]
+    },
+    {
+      "era": "contemporary",
+      "points": 3,
+      "source": {
+        "kind": "사진",
+        "title": "다음 사진",
+        "text": "1988년 9월, 서울 잠실 주경기장에서 열린 국제 대회 개회식 공연이다.",
+        "image": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/18/1988_Summer_Olympics_opening_ceremony.JPEG/960px-1988_Summer_Olympics_opening_ceremony.JPEG",
+          "alt": "경기장에서 전통 복장의 공연자가 굵은 줄 위에 올라 깃발을 흔드는 모습",
+          "credit": "Ken Hackman, U.S. Air Force · Public domain",
+          "page": "https://commons.wikimedia.org/wiki/File:1988_Summer_Olympics_opening_ceremony.JPEG"
+        }
+      },
+      "stem": "다음 사진의 행사가 열린 정부 시기의 사실로 옳은 것은?",
+      "choices": [
+        "금융 실명제가 실시되었다.",
+        "중국과 국교를 수립하였다.",
+        "남북 조절 위원회가 설치되었다.",
+        "6·15 남북 공동 선언이 발표되었다.",
+        "남북 이산가족 고향 방문단이 처음 교환되었다."
+      ],
+      "answer": 1,
+      "notes": [
+        "금융 실명제는 1993년 김영삼 정부 때 실시되었다.",
+        "자료는 1988년 서울 올림픽으로, 이 시기 노태우 정부는 북방 외교를 추진하여 1992년 중국과 국교를 수립하였다.",
+        "남북 조절 위원회는 1972년 박정희 정부 때 7·4 남북 공동 성명에 따라 설치되었다.",
+        "6·15 남북 공동 선언은 2000년 김대중 정부 때 발표되었다.",
+        "남북 이산가족 고향 방문단은 1985년 전두환 정부 때 처음 교환되었다."
+      ]
+    },
+    {
+      "era": "contemporary",
+      "points": 2,
+      "source": {
+        "kind": "사진",
+        "title": "다음 사진",
+        "text": "2000년 6월, 평양 순안 공항에서 남북의 최고 지도자가 처음 만났다.",
+        "image": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/1/18/Kim_Dae-jung_and_Kim_Jong-il_hugging_at_the_2000_Inter-Korean_Summit.jpg",
+          "alt": "공항 활주로에서 양복 차림의 남성과 점퍼 차림의 남성이 포옹하는 사진",
+          "credit": "대통령기록관 · CC BY-SA 4.0",
+          "page": "https://commons.wikimedia.org/wiki/File:Kim_Dae-jung_and_Kim_Jong-il_hugging_at_the_2000_Inter-Korean_Summit.jpg"
+        }
+      },
+      "stem": "다음 사진의 회담이 열린 정부 시기의 사실로 옳은 것은?",
+      "choices": [
+        "7·4 남북 공동 성명이 발표되었다.",
+        "남북한이 국제 연합(UN)에 동시 가입하였다.",
+        "10·4 남북 정상 선언이 발표되었다.",
+        "금강산 관광 사업이 시작되었다.",
+        "경제 협력 개발 기구(OECD)에 가입하였다."
+      ],
+      "answer": 3,
+      "notes": [
+        "7·4 남북 공동 성명은 1972년 박정희 정부 때 발표되었다.",
+        "남북한 유엔 동시 가입은 1991년 노태우 정부 때 이루어졌다.",
+        "10·4 남북 정상 선언은 2007년 노무현 정부 때 발표되었다.",
+        "자료는 2000년 남북 정상 회담으로, 이를 성사시킨 김대중 정부는 1998년 금강산 관광 사업을 시작하였다.",
+        "OECD 가입은 1996년 김영삼 정부 때 이루어졌다."
+      ]
+    }
+  ]
+}

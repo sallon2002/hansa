@@ -1,0 +1,314 @@
+{
+  "questions": [
+    {
+      "era": "goryeo",
+      "points": 2,
+      "source": {
+        "kind": "사진",
+        "title": "(가) 문화유산",
+        "text": "경상북도의 산지 사찰에 있는 고려 시대 목조 건물이다.",
+        "image": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/de/Muryangsujeon_at_Buseoksa_01.jpg/960px-Muryangsujeon_at_Buseoksa_01.jpg",
+          "alt": "산비탈 사찰 마당에 선 팔작지붕의 단층 목조 불전과 관람객들",
+          "credit": "Bernard Gagnon · CC0",
+          "page": "https://commons.wikimedia.org/wiki/File:Muryangsujeon_at_Buseoksa_01.jpg"
+        }
+      },
+      "stem": "(가) 문화유산에 대한 설명으로 옳은 것은?",
+      "choices": [
+        "현존하는 우리나라 유일의 조선 시대 5층 목탑이다.",
+        "통일 신라 때 돌을 쌓아 인공적으로 만든 석굴 사원이다.",
+        "주심포 양식에 배흘림기둥을 갖춘 고려 시대 목조 건축물이다.",
+        "조선 후기에 다포 양식으로 다시 지은 화엄사의 2층 불전이다.",
+        "고려 말 다포 양식으로 지어진 황해도 사리원의 불전이다."
+      ],
+      "answer": 2,
+      "notes": [
+        "보은 법주사 팔상전은 조선 후기에 다시 지은, 현존 유일의 5층 목탑이다.",
+        "경주 석굴암은 통일 신라 때 화강암을 쌓아 만든 인공 석굴 사원이다.",
+        "자료는 영주 부석사 무량수전으로, 주심포 양식과 배흘림기둥을 갖춘 고려 시대 대표 목조 건축물이다.",
+        "구례 화엄사 각황전은 조선 숙종 때 중건된 다포 양식의 중층 불전이다.",
+        "사리원 성불사 응진전은 고려 후기 다포 양식 건물로, 주심포 양식인 무량수전과 구별된다."
+      ]
+    },
+    {
+      "era": "goryeo",
+      "points": 2,
+      "source": {
+        "kind": "사진",
+        "title": "(가) 문화유산",
+        "text": "대리석으로 만든 10층 석탑으로, 일제 강점기에 일본으로 무단 반출되었다가 반환되었다.\n지금은 박물관 실내에 세워져 있다.",
+        "image": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fd/Gyeongcheonsa_Pagoda_in_the_National_Museum_of_Korea.jpg/960px-Gyeongcheonsa_Pagoda_in_the_National_Museum_of_Korea.jpg",
+          "alt": "박물관 실내 홀에 세워진 높은 회백색 다층 석탑과 관람객들",
+          "credit": "Ethan Doyle White · CC BY-SA 4.0",
+          "page": "https://commons.wikimedia.org/wiki/File:Gyeongcheonsa_Pagoda_in_the_National_Museum_of_Korea.jpg"
+        }
+      },
+      "stem": "(가) 문화유산이 만들어진 시기에 있었던 사실로 옳은 것은?",
+      "choices": [
+        "정동행성 이문소가 고려의 내정에 간섭하였다.",
+        "묘청이 서경 천도를 주장하며 난을 일으켰다.",
+        "윤관이 별무반을 이끌고 동북 9성을 쌓았다.",
+        "강감찬이 귀주에서 거란군을 크게 물리쳤다.",
+        "서희가 외교 담판으로 강동 6주를 확보하였다."
+      ],
+      "answer": 0,
+      "notes": [
+        "자료는 개성 경천사지 10층 석탑으로, 원 간섭기인 충목왕 때(1348) 세워졌으며, 이 시기 정동행성 이문소가 내정에 간섭하였다.",
+        "묘청의 서경 천도 운동(1135)은 인종 때의 일이다.",
+        "윤관의 동북 9성 축조(1107)는 예종 때의 일이다.",
+        "귀주 대첩(1019)은 현종 때 거란의 3차 침입을 물리친 싸움이다.",
+        "서희의 외교 담판(993)은 성종 때 거란의 1차 침입 때의 일이다."
+      ]
+    },
+    {
+      "era": "goryeo",
+      "points": 1,
+      "source": {
+        "kind": "사진",
+        "title": "(가) 문화유산",
+        "text": "강원도 평창의 사찰에 있는 석탑으로, 탑 앞에는 공양하는 보살상이 놓여 있다.",
+        "image": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7d/Korea-Pyeongchang-Woljeongsa_temple-Octagonal_Nine_Story_Stone_Pagoda-01.jpg/960px-Korea-Pyeongchang-Woljeongsa_temple-Octagonal_Nine_Story_Stone_Pagoda-01.jpg",
+          "alt": "아래에서 올려다본 여덟 모서리의 다층 석탑과 꼭대기의 금속 장식",
+          "credit": "parhessiastes · CC BY-SA 2.0",
+          "page": "https://commons.wikimedia.org/wiki/File:Korea-Pyeongchang-Woljeongsa_temple-Octagonal_Nine_Story_Stone_Pagoda-01.jpg"
+        }
+      },
+      "stem": "(가) 문화유산에 대한 설명으로 옳은 것은?",
+      "choices": [
+        "원나라 석탑의 영향을 받은 대리석 탑이다.",
+        "백제의 목탑 양식을 계승한 석탑이다.",
+        "통일 신라의 전형적인 3층 석탑 양식을 따르고 있다.",
+        "송의 영향을 받은 고려 전기의 다각 다층 석탑이다.",
+        "돌을 벽돌 모양으로 다듬어 쌓은 모전 석탑이다."
+      ],
+      "answer": 3,
+      "notes": [
+        "원의 영향을 받은 대리석 탑은 고려 후기의 개성 경천사지 10층 석탑이다.",
+        "백제 목탑 양식을 계승한 석탑으로는 익산 미륵사지 석탑이 대표적이다.",
+        "통일 신라의 전형적 3층 석탑으로는 경주 불국사 3층 석탑(석가탑)이 있다.",
+        "자료는 평창 월정사 8각 9층 석탑으로, 송의 영향을 받은 고려 전기의 다각 다층탑이다.",
+        "모전 석탑은 신라 선덕 여왕 때의 경주 분황사 모전 석탑이 대표적이다."
+      ]
+    },
+    {
+      "era": "goryeo",
+      "points": 2,
+      "source": {
+        "kind": "사진",
+        "title": "(가) 문화유산",
+        "text": "충청남도 논산의 사찰에 있는 높이 18m 가량의 석불로, 머리에 높은 관을 쓰고 있다.",
+        "image": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5f/Gwanchoksa_-_Maitreya_IMG_20160928_034153.jpg/960px-Gwanchoksa_-_Maitreya_IMG_20160928_034153.jpg",
+          "alt": "얼굴이 크고 머리 위에 네모난 갓 모양 관을 얹은 거대한 석조 입상",
+          "credit": "G41rn8 · CC BY-SA 4.0",
+          "page": "https://commons.wikimedia.org/wiki/File:Gwanchoksa_-_Maitreya_IMG_20160928_034153.jpg"
+        }
+      },
+      "stem": "(가) 문화유산에 대한 설명으로 옳은 것은?",
+      "choices": [
+        "통일 신라 불교 조각의 정수를 보여 주는 석굴 사원의 본존불이다.",
+        "고려 초기 지역의 특색을 살려 만든 거대한 불상이다.",
+        "쇠로 주조된 불상으로, 경기도 하남 하사창동에서 발견되었다.",
+        "신라 양식을 계승한 소조 불상으로, 고려의 목조 불전 안에 모셔져 있다.",
+        "'백제의 미소'로 불리는 마애 삼존불이다."
+      ],
+      "answer": 1,
+      "notes": [
+        "석굴 사원의 본존불은 통일 신라의 경주 석굴암 본존불이다.",
+        "자료는 논산 관촉사 석조 미륵보살 입상으로, 고려 초 지방 세력의 영향 아래 만들어진 거대하고 개성적인 불상이다.",
+        "하남 하사창동 철조 석가여래 좌상은 고려 초에 만들어진 철불이다.",
+        "영주 부석사 소조 여래 좌상은 신라 양식을 계승한 고려의 소조 불상으로, 무량수전에 모셔져 있다.",
+        "'백제의 미소'로 불리는 불상은 서산 용현리 마애 여래 삼존상이다."
+      ]
+    },
+    {
+      "era": "goryeo",
+      "points": 2,
+      "source": {
+        "kind": "사진",
+        "title": "(가) 문화유산",
+        "text": "고려 시대에 만들어진 매병으로, 비색 바탕에 구름과 학 무늬가 하얗게 나타나 있다.",
+        "image": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6c/%EC%B2%AD%EC%9E%90_%EC%83%81%EA%B0%90_%EA%B5%AC%EB%A6%84_%ED%95%99_%EB%AC%B4%EB%8A%AC_%EB%A7%A4%EB%B3%91_%EA%B3%A0%EB%A0%A4-%E9%9D%91%E7%A3%81%E8%B1%A1%E5%B5%8C%E9%9B%B2%E9%B6%B4%E6%96%87%E6%A2%85%E7%94%81_%E9%AB%98%E9%BA%97-Maebyeong_decorated_with_cranes_and_clouds_MET_DT4857.jpg/960px-%EC%B2%AD%EC%9E%90_%EC%83%81%EA%B0%90_%EA%B5%AC%EB%A6%84_%ED%95%99_%EB%AC%B4%EB%8A%AC_%EB%A7%A4%EB%B3%91_%EA%B3%A0%EB%A0%A4-%E9%9D%91%E7%A3%81%E8%B1%A1%E5%B5%8C%E9%9B%B2%E9%B6%B4%E6%96%87%E6%A2%85%E7%94%81_%E9%AB%98%E9%BA%97-Maebyeong_decorated_with_cranes_and_clouds_MET_DT4857.jpg",
+          "alt": "어깨가 넓고 아래로 갈수록 좁아지는 푸른빛 도자기 병에 흰 구름과 학 무늬가 있는 모습",
+          "credit": "The Metropolitan Museum of Art · CC0",
+          "page": "https://commons.wikimedia.org/wiki/File:청자_상감_구름_학_무늬_매병_고려-靑磁象嵌雲鶴文梅甁_高麗-Maebyeong_decorated_with_cranes_and_clouds_MET_DT4857.jpg"
+        }
+      },
+      "stem": "(가) 문화유산에 대한 설명으로 옳은 것은?",
+      "choices": [
+        "회색 바탕흙에 백토를 바르고 장식하였으며, 15세기에 유행하였다.",
+        "흰 바탕에 푸른 안료로 그림을 그렸으며, 조선 후기에 널리 쓰였다.",
+        "순백의 바탕으로 조선 사대부의 검소하고 깔끔한 취향을 반영하였다.",
+        "높은 온도에서 구운 회청색 경질 토기로, 가야와 신라에서 만들어졌다.",
+        "그릇 표면을 파낸 자리에 다른 색의 흙을 메워 무늬를 내는 기법이 쓰였다."
+      ],
+      "answer": 4,
+      "notes": [
+        "분청사기는 회색 태토에 백토를 입혀 장식한 자기로, 15세기에 유행하였다.",
+        "청화 백자는 흰 바탕에 푸른 코발트 안료로 그림을 그린 자기로, 조선 후기에 널리 쓰였다.",
+        "순백자는 16세기 이후 사대부의 검소한 취향을 반영해 유행하였다.",
+        "회청색 경질 토기는 가야와 신라에서 높은 온도로 구워 만든 토기이다.",
+        "자료는 청자 상감 운학문 매병으로, 표면을 파내고 백토·자토를 메우는 고려 고유의 상감 기법이 쓰였다."
+      ]
+    },
+    {
+      "era": "goryeo",
+      "points": 3,
+      "source": {
+        "kind": "사진",
+        "title": "(가) 문화유산",
+        "text": "몽골의 침입을 불교의 힘으로 물리치려는 염원을 담아 새긴 목판으로, 경상남도 합천의 사찰에 보관되어 있다.",
+        "image": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c7/Korea-Haeinsa_Tripitaka_Koreana_woodblock_2770-06a.jpg/960px-Korea-Haeinsa_Tripitaka_Koreana_woodblock_2770-06a.jpg",
+          "alt": "한자가 빼곡히 돋을새김된 검은 직사각형 나무 판",
+          "credit": "Steve46814 · CC BY-SA 3.0",
+          "page": "https://commons.wikimedia.org/wiki/File:Korea-Haeinsa_Tripitaka_Koreana_woodblock_2770-06a.jpg"
+        }
+      },
+      "stem": "(가) 문화유산이 만들어진 시기에 있었던 사실로 옳은 것은?",
+      "choices": [
+        "강감찬이 귀주에서 거란군을 물리쳤다.",
+        "고려 정부가 도읍을 강화도로 옮겨 몽골에 항전하였다.",
+        "의천이 교장도감을 두고 교장을 간행하였다.",
+        "공민왕이 쌍성총관부를 공격하여 철령 이북의 땅을 되찾았다.",
+        "이자겸이 척준경과 함께 난을 일으켰다."
+      ],
+      "answer": 1,
+      "notes": [
+        "귀주 대첩(1019)은 현종 때의 일로, 이 무렵 거란을 물리치려 새긴 것은 초조대장경이다.",
+        "자료는 합천 해인사 대장경판(재조대장경, 1236~1251)으로, 강화도 도읍기(1232~1270)에 최씨 무신 정권 주도로 새겨졌다.",
+        "의천의 교장 간행은 11세기 말 선종·숙종 때의 일이다.",
+        "쌍성총관부 수복(1356)은 원 간섭에서 벗어나려던 공민왕 때의 일이다.",
+        "이자겸의 난(1126)은 인종 때의 일이다."
+      ]
+    },
+    {
+      "era": "joseon1",
+      "points": 2,
+      "source": {
+        "kind": "사진",
+        "title": "(가) 문화유산",
+        "text": "솥 모양의 오목한 그릇 안에 시각선과 절기선을 새겨, 바늘의 그림자로 시각을 알 수 있게 한 기구이다.",
+        "image": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/58/Seoul-Gyeongbokgung-Sundial-01.jpg/960px-Seoul-Gyeongbokgung-Sundial-01.jpg",
+          "alt": "돌 받침 위에 놓인 반구형 청동 그릇과 그 안의 선, 가운데 뾰족한 바늘",
+          "credit": "Nagyman · CC BY-SA 2.0",
+          "page": "https://commons.wikimedia.org/wiki/File:Seoul-Gyeongbokgung-Sundial-01.jpg"
+        }
+      },
+      "stem": "(가) 문화유산이 처음 제작된 왕의 재위 기간에 있었던 사실로 옳은 것은?",
+      "choices": [
+        "주자소에서 계미자가 주조되었다.",
+        "『경국대전』이 완성되어 반포되었다.",
+        "현직 관리에게만 수조권을 주는 직전법이 실시되었다.",
+        "전분 6등법과 연분 9등법으로 전세를 거두는 공법이 마련되었다.",
+        "서거정 등이 『동국통감』을 편찬하였다."
+      ],
+      "answer": 3,
+      "notes": [
+        "계미자는 태종 때(1403) 주조된 금속 활자이다.",
+        "『경국대전』은 성종 때(1485) 완성·반포되었다.",
+        "직전법은 세조 때(1466) 실시되었다.",
+        "자료는 앙부일구로, 세종 때 처음 만들어졌으며 세종은 전분 6등법·연분 9등법의 공법(1444)을 마련하였다.",
+        "『동국통감』은 성종 때(1485) 서거정 등이 편찬한 통사이다."
+      ]
+    },
+    {
+      "era": "joseon1",
+      "points": 2,
+      "source": {
+        "kind": "사진",
+        "title": "(가) 문화유산",
+        "text": "서울 도심 공원에 있는 대리석 다층 탑으로, 고려 후기 대리석 탑의 형식을 이어받았다.\n지금은 유리 보호각 안에 있다.",
+        "image": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/c/c0/Korea-Seoul-Tapgol_Park_10_Storied_Pagoda_at_Wongaksa_0095-06.JPG",
+          "alt": "유리 보호각 너머로 보이는 조각이 많은 다층 석탑",
+          "credit": "Steve46814 · CC BY-SA 3.0",
+          "page": "https://commons.wikimedia.org/wiki/File:Korea-Seoul-Tapgol_Park_10_Storied_Pagoda_at_Wongaksa_0095-06.JPG"
+        }
+      },
+      "stem": "(가) 문화유산이 세워진 왕의 재위 기간에 있었던 사실로 옳은 것은?",
+      "choices": [
+        "이시애가 함길도에서 난을 일으켰다.",
+        "최윤덕과 김종서가 4군과 6진을 개척하였다.",
+        "무오사화가 일어나 김일손 등 사림이 화를 입었다.",
+        "삼포왜란을 계기로 비변사가 임시 기구로 설치되었다.",
+        "정도전이 『조선경국전』을 지어 통치 체제의 기틀을 제시하였다."
+      ],
+      "answer": 0,
+      "notes": [
+        "자료는 서울 원각사지 10층 석탑으로, 세조 때(1467) 세워졌으며 같은 해 함길도에서 이시애의 난이 일어났다.",
+        "4군 6진 개척은 세종 때의 일이다.",
+        "무오사화(1498)는 연산군 때의 일이다.",
+        "삼포왜란(1510)과 비변사 설치는 중종 때의 일이다.",
+        "『조선경국전』은 태조 때 정도전이 지었다."
+      ]
+    },
+    {
+      "era": "joseon1",
+      "points": 2,
+      "source": {
+        "kind": "사진",
+        "title": "(가) 문화유산",
+        "text": "회색 바탕흙에 백토를 입힌 뒤 연꽃과 물고기 무늬를 새겨 꾸민 납작한 병이다.",
+        "image": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0b/%EB%B6%84%EC%B2%AD%EC%82%AC%EA%B8%B0_%EB%B0%95%EC%A7%80%EC%97%B0%ED%99%94%EC%96%B4%EB%AC%B8_%ED%8E%B8%EB%B3%91.jpg/960px-%EB%B6%84%EC%B2%AD%EC%82%AC%EA%B8%B0_%EB%B0%95%EC%A7%80%EC%97%B0%ED%99%94%EC%96%B4%EB%AC%B8_%ED%8E%B8%EB%B3%91.jpg",
+          "alt": "둥글고 납작한 몸체에 꽃과 물고기 무늬가 새겨진 회백색 도자기 병",
+          "credit": "Unknown author · Public domain",
+          "page": "https://commons.wikimedia.org/wiki/File:분청사기_박지연화어문_편병.jpg"
+        }
+      },
+      "stem": "(가) 문화유산이 유행한 시기에 있었던 사실로 옳은 것은?",
+      "choices": [
+        "상평통보가 법화로 채택되어 전국적으로 유통되었다.",
+        "벽란도가 국제 무역항으로 번성하였다.",
+        "대동법이 경기도에서 처음 실시되었다.",
+        "허준이 『동의보감』을 완성하였다.",
+        "우리 실정에 맞는 농법을 정리한 『농사직설』이 편찬되었다."
+      ],
+      "answer": 4,
+      "notes": [
+        "상평통보는 숙종 때(1678) 법화로 채택되어 널리 유통되었다.",
+        "벽란도는 고려 시대 예성강 하구의 국제 무역항이다.",
+        "대동법은 광해군 때(1608) 경기도에서 처음 실시되었다.",
+        "『동의보감』은 광해군 때(1610) 완성되었다.",
+        "자료는 분청사기로, 15세기에 유행하였으며 같은 시기 세종 때(1429) 『농사직설』이 편찬되었다."
+      ]
+    },
+    {
+      "era": "joseon1",
+      "points": 2,
+      "source": {
+        "kind": "사진",
+        "title": "(가) 문화유산",
+        "text": "서울에 있는 조선 왕실의 건축물로, 옆으로 길게 이어진 건물 앞에 넓은 월대가 펼쳐져 있다.",
+        "image": {
+          "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f2/Jeongjeon%2C_Jongmyo_%28Summer%2C_2013%29.jpg/960px-Jeongjeon%2C_Jongmyo_%28Summer%2C_2013%29.jpg",
+          "alt": "넓은 돌 마당 뒤로 좌우로 길게 이어진 붉은 기둥의 단층 목조 건물",
+          "credit": "Cultural Heritage Administration · KOGL Type 1",
+          "page": "https://commons.wikimedia.org/wiki/File:Jeongjeon,_Jongmyo_(Summer,_2013).jpg"
+        }
+      },
+      "stem": "(가) 문화유산에 대한 설명으로 옳은 것은?",
+      "choices": [
+        "임진왜란 때 불탄 뒤 오랫동안 방치되었다가 흥선 대원군 때 중건되었다.",
+        "공자의 위패를 모신 문묘가 있는 조선 최고의 교육 기관이다.",
+        "역대 왕과 왕비의 신주를 모신 사당으로, 유네스코 세계 유산에 등재되었다.",
+        "토지의 신과 곡식의 신에게 제사를 지내던 곳이다.",
+        "정조가 화성에 행차할 때 머물던 행궁이다."
+      ],
+      "answer": 2,
+      "notes": [
+        "경복궁은 임진왜란 때 불탄 뒤 흥선 대원군 때 중건되었다.",
+        "성균관은 문묘를 갖춘 조선의 최고 교육 기관이다.",
+        "자료는 서울 종묘 정전으로, 조선 역대 왕과 왕비의 신주를 모신 사당이며 1995년 유네스코 세계 유산에 등재되었다.",
+        "사직단은 토지신(사)과 곡식신(직)에게 제사 지내던 곳이다.",
+        "화성 행궁은 정조가 수원 화성에 행차할 때 머물던 곳이다."
+      ]
+    }
+  ]
+}

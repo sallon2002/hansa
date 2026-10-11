@@ -410,9 +410,32 @@
   function paragraphs(text) {
     return lines(text).map(function (l) { return "<p>" + mark(l) + "</p>"; }).join("");
   }
+  /** 사진 자료: 위키미디어 공용의 자유 라이선스 사진. 출처는 답을 고른 뒤에 보인다(파일 이름에 정답이 들어 있는 경우가 많아서) */
+  function figure(img) {
+    if (!img || !img.src) return "";
+    return (
+      '<figure class="src-fig">' +
+      '<img src="' + esc(img.src) + '" alt="' + esc(img.alt || "") + '" loading="eager" decoding="async" referrerpolicy="no-referrer" ' +
+      "onerror=\"this.parentNode.classList.add('is-broken')\">" +
+      '<span class="fig-fallback">사진을 불러오지 못했어요 — ' + esc(img.alt || "") + "</span>" +
+      (img.credit
+        ? '<figcaption class="credit">사진: ' +
+          (img.page ? '<a href="' + esc(img.page) + '" target="_blank" rel="noopener">' + esc(img.credit) + "</a>" : esc(img.credit)) +
+          "</figcaption>"
+        : "") +
+      "</figure>"
+    );
+  }
   function renderSource(s) {
     var kind = s.kind;
     var html = '<span class="src-tag">자료</span>';
+    if (kind === "사진") {
+      html += figure(s.image);
+      if (s.title) html += '<p class="fig-title">' + mark(s.title) + "</p>";
+      if (s.text) html += '<div class="fig-text">' + paragraphs(s.text) + "</div>";
+      return html;
+    }
+    if (s.image) html += figure(s.image);
     if (kind === "사료") {
       html += '<blockquote class="src-quote">' + paragraphs(s.text) + "</blockquote>";
       if (s.cite) html += '<p class="src-cite">– ' + mark(s.cite) + " –</p>";
@@ -666,11 +689,16 @@
     // 자료 (실전만)
     var src = $("src");
     if (tab === "exam") {
-      src.className = "src kind-" + q.source.kind;
-      src.innerHTML = renderSource(q.source);
+      // 같은 문제를 다시 그릴 때(답을 고를 때)는 자료를 새로 만들지 않는다 — 사진이 깜빡이지 않게
+      if (src.dataset.id !== q.id + "#" + count) {
+        src.className = "src kind-" + q.source.kind + (q.source.image ? " has-fig" : "");
+        src.innerHTML = renderSource(q.source);
+        src.dataset.id = q.id + "#" + count;
+      }
     } else {
       src.className = "src hidden";
       src.innerHTML = "";
+      src.dataset.id = "";
     }
 
     $("qText").innerHTML = mark(q.q) + (tab === "exam" ? '<span class="pts">[' + q.points + "점]</span>" : "");

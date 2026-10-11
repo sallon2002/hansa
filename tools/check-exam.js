@@ -12,7 +12,13 @@
 //     "text": "...",            본문. 줄바꿈은 \n. 대화는 "이름: 말" 한 줄씩, 연표는 사건 6개 한 줄씩,
 //                               묶음은 "(가) ..." "(나) ..." 한 줄씩. (가)·(나)는 그대로, 밑줄은 __이렇게__
 //     "cite": "『고려사』",     출처 (없으면 생략)
-//     "lead": "..."             연표 위에 보이는 '다음 사실' 상자 (연표에서만)
+//     "lead": "...",            연표 위에 보이는 '다음 사실' 상자 (연표에서만)
+//     "image": {                사진 (kind "사진" 에서 필수, 다른 kind 에도 붙일 수 있음)
+//       "src": "https://upload.wikimedia.org/...",  위키미디어 공용 썸네일 주소
+//       "alt": "...",           사진 설명 (정답 이름을 쓰지 말 것 — 불러오기 실패 시 보임)
+//       "credit": "작성자 · CC BY-SA 4.0",  답을 고른 뒤 보임
+//       "page": "https://commons.wikimedia.org/wiki/File:..."
+//     }
 //   },
 //   "stem": "(가) 왕의 재위 기간에 있었던 사실로 옳은 것은?",
 //   "choices": ["...", "...", "...", "...", "..."],   5개. 번호(①) 붙이지 않음
@@ -27,7 +33,7 @@ const ROOT = path.join(__dirname, "..");
 global.window = {};
 require(path.join(ROOT, "data/eras.js"));
 const ERA_IDS = window.ERAS.map((e) => e.id);
-const KINDS = ["사료", "대화", "안내문", "신문", "일기", "연표", "검색", "묶음"];
+const KINDS = ["사료", "대화", "안내문", "신문", "일기", "연표", "검색", "묶음", "사진"];
 
 function load(file) {
   if (file.endsWith(".json")) {
@@ -53,7 +59,15 @@ function checkOne(q, i) {
   else {
     if (!KINDS.includes(s.kind)) errs.push(`${tag}: source.kind '${s.kind}' 는 ${KINDS.join("·")} 중 하나`);
     const text = typeof s.text === "string" ? s.text.trim() : "";
-    if (!text) errs.push(`${tag}: source.text 비어 있음`);
+    if (!text && s.kind !== "사진") errs.push(`${tag}: source.text 비어 있음`);
+    if (s.kind === "사진" && !s.image) errs.push(`${tag}: 사진 자료에 image 없음`);
+    if (s.image) {
+      const im = s.image;
+      if (!/^https:\/\/(upload|thumb)\.wikimedia\.org\//.test(im.src || "")) errs.push(`${tag}: image.src 는 https://upload.wikimedia.org/ 또는 thumb.wikimedia.org 주소`);
+      if (!im.alt) errs.push(`${tag}: image.alt(사진 설명) 없음`);
+      if (!im.credit) errs.push(`${tag}: image.credit(작성자 · 라이선스) 없음`);
+      if (!/^https:\/\/commons\.wikimedia\.org\//.test(im.page || "")) errs.push(`${tag}: image.page 는 commons.wikimedia.org 파일 페이지`);
+    }
     const lines = text.split("\n").map((l) => l.trim()).filter(Boolean);
     if (s.kind === "연표") {
       if (lines.length < 5 || lines.length > 6) errs.push(`${tag}: 연표는 사건 5~6개를 한 줄씩 (지금 ${lines.length}줄)`);

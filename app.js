@@ -415,6 +415,7 @@
     if (!img || !img.src) return "";
     return (
       '<figure class="src-fig">' +
+      (img.label ? '<span class="fig-label">' + esc(img.label) + "</span>" : "") +
       '<img src="' + esc(img.src) + '" alt="' + esc(img.alt || "") + '" loading="eager" decoding="async" referrerpolicy="no-referrer" ' +
       "onerror=\"this.parentNode.classList.add('is-broken')\">" +
       '<span class="fig-fallback">사진을 불러오지 못했어요 — ' + esc(img.alt || "") + "</span>" +
@@ -436,6 +437,7 @@
       return html;
     }
     if (s.image) html += figure(s.image);
+    if (s.images) html += '<div class="src-figs">' + s.images.map(figure).join("") + "</div>";
     if (kind === "사료") {
       html += '<blockquote class="src-quote">' + paragraphs(s.text) + "</blockquote>";
       if (s.cite) html += '<p class="src-cite">– ' + mark(s.cite) + " –</p>";
@@ -691,7 +693,7 @@
     if (tab === "exam") {
       // 같은 문제를 다시 그릴 때(답을 고를 때)는 자료를 새로 만들지 않는다 — 사진이 깜빡이지 않게
       if (src.dataset.id !== q.id + "#" + count) {
-        src.className = "src kind-" + q.source.kind + (q.source.image ? " has-fig" : "");
+        src.className = "src kind-" + q.source.kind + (q.source.image || q.source.images ? " has-fig" : "");
         src.innerHTML = renderSource(q.source);
         src.dataset.id = q.id + "#" + count;
       }

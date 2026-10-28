@@ -3,17 +3,17 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <title>한국사 1급 문제 풀이</title>
+    <title>탈기술원을 향하여</title>
     <meta
       name="description"
-      content="한국사능력검정 심화 출제 비중으로 섞어 내는 개념 객관식과 기출 유형 실전 문제 — 구석기부터 노무현 정부까지"
+      content="한국사능력검정 1급과 투자자산운용사 — 개념 객관식과 실전 문제"
     />
     <meta name="theme-color" content="#07070a" />
     <!-- 아이폰·아이패드 「홈 화면에 추가」: 주소창 없이 앱처럼 열리고, 아이콘·이름이 붙는다 -->
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="apple-mobile-web-app-title" content="한국사 1급" />
+    <meta name="apple-mobile-web-app-title" content="탈기술원" />
     <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
     <link rel="manifest" href="manifest.webmanifest" />
     <link
@@ -31,7 +31,12 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;600;700;800&family=Noto+Serif+KR:wght@400;600;700&family=Nanum+Pen+Script&display=swap"
     />
-    <link rel="stylesheet" href="styles.css?v=20261012" />
+    <link rel="stylesheet" href="styles.css?v=20261028" />
+    <!-- 과목: 주소 ?s=invest 면 투자자산운용사, 아니면 한국사 -->
+    <script>
+      window.SUBJECT = new URLSearchParams(location.search).get("s") === "invest" ? "invest" : "hansa";
+      document.documentElement.setAttribute("data-subject", window.SUBJECT);
+    </script>
   </head>
   <body>
     <!-- 배경: 느리게 흐르는 오로라 + 별 몇 점 -->
@@ -44,12 +49,25 @@
     <!-- 마우스를 따라다니는 은은한 빛 (터치 화면에는 없음) -->
     <div class="glow" id="glow" aria-hidden="true"></div>
 
+    <!-- 과목 배너: PC·아이패드는 왼쪽 세로, 휴대폰은 위쪽 탭 -->
+    <aside class="subjects" aria-label="과목">
+      <p class="subjects-title">탈기술원을 향하여</p>
+      <a class="subj subj-hansa" data-subject="hansa" href="./">
+        <span class="subj-mark" aria-hidden="true">史</span>
+        <span class="subj-text"><span class="subj-name">한국사</span><span class="subj-sub">능력검정 심화 · 1급</span></span>
+      </a>
+      <a class="subj subj-invest" data-subject="invest" href="./?s=invest">
+        <span class="subj-mark" aria-hidden="true">₩</span>
+        <span class="subj-text"><span class="subj-name">투자자산운용사</span><span class="subj-sub">금융투자협회 자격시험</span></span>
+      </a>
+    </aside>
+
     <div class="wrap">
       <div class="nav-shell">
         <header class="nav-pill">
-          <a class="brand" href="./" aria-label="한국사 1급 처음으로">
-            <span class="brand-mark" aria-hidden="true">史</span>
-            <span class="wordmark">한국사 1급</span>
+          <a class="brand" href="./" aria-label="탈기술원을 향하여 처음으로">
+            <span class="brand-mark" aria-hidden="true"><span class="m-hansa">史</span><span class="m-invest">₩</span></span>
+            <span class="wordmark">탈기술원을 향하여</span>
           </a>
           <nav class="seg" id="tabSeg" role="tablist" aria-label="문제 종류">
             <span class="seg-slider" aria-hidden="true"></span>
@@ -140,7 +158,7 @@
                   </div>
                 </div>
                 <div class="era-head">
-                  <p class="panel-title">시대별</p>
+                  <p class="panel-title" id="eraHeadTitle">시대별</p>
                   <small>출제 비중 · 정답률</small>
                 </div>
                 <ul class="era-list" id="eraList"></ul>
@@ -190,29 +208,25 @@
 
     <div class="grain" aria-hidden="true"></div>
 
-    <!-- 문제 은행: 시대마다 파일 하나. 새 문제는 각 파일 맨 아래에 덧붙인다 -->
-    <script src="data/eras.js?v=20261012"></script>
-    <script src="data/prehistory.js?v=20261012"></script>
-    <script src="data/gojoseon.js?v=20261012"></script>
-    <script src="data/three.js?v=20261012"></script>
-    <script src="data/nambuk.js?v=20261012"></script>
-    <script src="data/goryeo.js?v=20261012"></script>
-    <script src="data/joseon1.js?v=20261012"></script>
-    <script src="data/joseon2.js?v=20261012"></script>
-    <script src="data/modern.js?v=20261012"></script>
-    <script src="data/colonial.js?v=20261012"></script>
-    <script src="data/contemporary.js?v=20261012"></script>
-    <!-- 실전 문제 (기출 유형) -->
-    <script src="data/exam/prehistory.js?v=20261012"></script>
-    <script src="data/exam/gojoseon.js?v=20261012"></script>
-    <script src="data/exam/three.js?v=20261012"></script>
-    <script src="data/exam/nambuk.js?v=20261012"></script>
-    <script src="data/exam/goryeo.js?v=20261012"></script>
-    <script src="data/exam/joseon1.js?v=20261012"></script>
-    <script src="data/exam/joseon2.js?v=20261012"></script>
-    <script src="data/exam/modern.js?v=20261012"></script>
-    <script src="data/exam/colonial.js?v=20261012"></script>
-    <script src="data/exam/contemporary.js?v=20261012"></script>
-    <script src="app.js?v=20261012"></script>
+    <!-- 문제 은행: 과목에 따라 골라 읽는다. 새 문제는 각 파일 맨 아래에 덧붙인다 (줄 순서가 오답 노트 id) -->
+    <script>
+      (function () {
+        var v = "?v=20261028";
+        var files;
+        if (window.SUBJECT === "invest") {
+          var ids = ["tax", "products", "realestate", "alt", "global", "analysis", "risk", "ethics", "law", "kofia", "equity", "bond", "deriv", "perf", "macro", "portfolio"];
+          files = ["data/invest/eras.js"]
+            .concat(ids.map(function (id) { return "data/invest/concept/" + id + ".js"; }))
+            .concat(ids.map(function (id) { return "data/invest/exam/" + id + ".js"; }));
+        } else {
+          var eras = ["prehistory", "gojoseon", "three", "nambuk", "goryeo", "joseon1", "joseon2", "modern", "colonial", "contemporary"];
+          files = ["data/eras.js"]
+            .concat(eras.map(function (id) { return "data/" + id + ".js"; }))
+            .concat(eras.map(function (id) { return "data/exam/" + id + ".js"; }));
+        }
+        files.push("app.js");
+        document.write(files.map(function (f) { return '<script src="' + f + v + '"><\/script>'; }).join(""));
+      })();
+    </script>
   </body>
 </html>

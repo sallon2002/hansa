@@ -1900,3 +1900,194 @@ button:disabled {
     max-height: 7.5rem;
   }
 }
+
+/* ---------- 과목 배너 (탈기술원을 향하여) ---------- */
+/* 브랜드 글자는 과목마다 */
+.brand-mark .m-invest,
+[data-subject="invest"] .brand-mark .m-hansa {
+  display: none;
+}
+[data-subject="invest"] .brand-mark .m-invest {
+  display: inline;
+}
+.subjects {
+  position: relative;
+  z-index: 11;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  padding: calc(env(safe-area-inset-top, 0px) + 0.75rem) 1rem 0;
+}
+.subjects-title {
+  display: none;
+}
+.subj {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.6rem 0.75rem;
+  border-radius: 1rem;
+  color: var(--muted);
+  text-decoration: none;
+  background: rgba(255, 255, 255, 0.03);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 0 0 1px var(--line);
+  transition:
+    background 0.4s var(--ease),
+    box-shadow 0.4s var(--ease),
+    color 0.4s var(--ease),
+    transform 0.4s var(--ease);
+}
+.subj:hover {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.06);
+}
+.subj-mark {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 2.1rem;
+  height: 2.1rem;
+  border-radius: 0.7rem;
+  font-family: var(--serif);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.06);
+  transition: all 0.4s var(--ease);
+}
+.subj-text {
+  display: grid;
+  min-width: 0;
+}
+.subj-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.subj-sub {
+  display: none;
+  font-size: 0.72rem;
+  color: var(--muted-2);
+}
+.subj.is-on {
+  color: var(--text);
+  background:
+    radial-gradient(120% 140% at 0% 0%, rgba(214, 164, 79, 0.2), transparent 60%),
+    rgba(255, 255, 255, 0.05);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 0 0 1px var(--accent-line),
+    0 18px 40px -24px rgba(214, 164, 79, 0.6);
+}
+.subj.is-on .subj-mark {
+  color: var(--accent-ink);
+  background: linear-gradient(180deg, #f0c877, var(--accent));
+  box-shadow: 0 8px 20px -8px rgba(214, 164, 79, 0.8);
+}
+.subj-invest.is-on {
+  background:
+    radial-gradient(120% 140% at 0% 0%, rgba(85, 185, 207, 0.22), transparent 60%),
+    rgba(255, 255, 255, 0.05);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 0 0 1px rgba(85, 185, 207, 0.45),
+    0 18px 40px -24px rgba(85, 185, 207, 0.6);
+}
+.subj-invest.is-on .subj-mark {
+  color: #04151a;
+  background: linear-gradient(180deg, #8ad7e6, #55b9cf);
+  box-shadow: 0 8px 20px -8px rgba(85, 185, 207, 0.8);
+}
+.subjects + .wrap {
+  padding-top: 0.75rem;
+}
+/* PC·아이패드: 왼쪽에 크게 세운 배너 두 개 */
+@media (min-width: 900px) {
+  .subjects {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 15.5rem;
+    grid-template-columns: 1fr;
+    align-content: start;
+    gap: 0.9rem;
+    padding: calc(env(safe-area-inset-top, 0px) + 1.4rem) 1rem 1.4rem;
+    border-right: 1px solid var(--line);
+    background: linear-gradient(180deg, rgba(13, 13, 17, 0.75), rgba(7, 7, 10, 0.4));
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  .subjects-title {
+    display: block;
+    margin: 0 0.3rem 0.4rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    color: var(--muted-2);
+  }
+  .subj {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.6rem;
+    min-height: 9.5rem;
+    padding: 1.1rem 1.1rem 1.15rem;
+    border-radius: 1.3rem;
+  }
+  .subj:hover {
+    transform: translateY(-2px);
+  }
+  .subj-mark {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 1rem;
+    font-size: 1.5rem;
+  }
+  .subj-name {
+    font-size: 1.2rem;
+    white-space: normal;
+  }
+  .subj-sub {
+    display: block;
+    margin-top: 0.15rem;
+  }
+  .subjects + .wrap {
+    /* 배너 오른쪽 남은 폭 한가운데에 */
+    margin-left: calc(15.5rem + max(0px, (100vw - 15.5rem - 80rem) / 2));
+    margin-right: 0;
+    padding-top: calc(env(safe-area-inset-top, 0px) + 0.75rem);
+  }
+}
+
+/* 실전 자료의 표 (투자자산운용사) */
+.tbl-wrap {
+  overflow-x: auto;
+}
+.src-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--sans);
+  font-size: 13.5px;
+  text-align: center;
+}
+.src-table th,
+.src-table td {
+  padding: 0.35rem 0.5rem;
+  border: 1px solid rgba(43, 36, 26, 0.35);
+}
+.src-table th {
+  background: rgba(43, 36, 26, 0.08);
+  font-weight: 700;
+}
+/* 휴대폰: 위쪽 과목 탭이 과목을 알려 주므로 상단 바의 긴 이름은 접는다 */
+@media (max-width: 639px) {
+  .subjects ~ .wrap .wordmark {
+    display: none;
+  }
+}

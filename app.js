@@ -6,15 +6,24 @@
   var ERAS = window.ERAS;
   var BANK = window.BANK || {};
   var EXAM = window.EXAM || {};
-  var STORE_KEY = "hansa1-v2";
-  var OLD_KEY = "hansa1-v1";
+  // 과목: index.html 이 주소(?s=invest)를 보고 정해 둔다. 과목마다 문제·기록·기록 옮기기 코드가 따로다
+  var SUBJECT = window.SUBJECT === "invest" ? "invest" : "hansa";
+  var IS_INVEST = SUBJECT === "invest";
+  var STORE_KEY = IS_INVEST ? "invest1-v1" : "hansa1-v2";
+  var OLD_KEY = IS_INVEST ? "" : "hansa1-v1";
   var CIRCLED = ["①", "②", "③", "④", "⑤"];
   var TOTAL_WEIGHT = ERAS.reduce(function (s, e) { return s + e.weight; }, 0);
   var ERA_BY_ID = {};
   ERAS.forEach(function (e) { ERA_BY_ID[e.id] = e; });
 
   /** 시대마다 색 하나 — 고려는 청자, 조선 전기는 청화백자, 일제 강점기는 진홍 */
-  var ERA_COLOR = {
+  var ERA_COLOR = IS_INVEST ? {
+    // 1과목 금빛 · 2과목 청록 · 3과목 보라 계열
+    tax: "#d6a44f", products: "#e0b866", realestate: "#c8924e",
+    alt: "#55b9cf", global: "#62acf0", analysis: "#74bda8", risk: "#4fa3a0",
+    ethics: "#ae92e6", law: "#9b7fe0", kofia: "#c3a6f0", equity: "#d4705f", bond: "#7a9ce0",
+    deriv: "#d0626f", perf: "#a2afc2", macro: "#d1aa4f", portfolio: "#e08a6a",
+  } : {
     prehistory: "#a2afc2",
     gojoseon: "#c8924e",
     three: "#d4705f",
@@ -28,7 +37,22 @@
   };
 
   /** 탭마다 다른 머리글·안내 */
-  var TAB_TEXT = {
+  var TAB_TEXT = IS_INVEST ? {
+    concept: {
+      eyebrow: "투자자산운용사 · 개념",
+      headline: "핵심 개념을 한 문제씩",
+      leadKey: "세부과목 출제 비중대로 섞어 냅니다. 번호를 누르거나 클릭해서 고르면 보기마다 바로 밑에 설명이 붙어요. Enter 로 다음 문제.",
+      leadTouch: "세부과목 출제 비중대로 섞어 냅니다. 보기를 누르면 바로 밑에 설명이 붙어요. 아래 다음 문제 버튼으로 넘어가세요.",
+      stats: "개념 문제",
+    },
+    exam: {
+      eyebrow: "투자자산운용사 · 실전",
+      headline: "시험장처럼, 계산까지 끝까지",
+      leadKey: "실제 시험처럼 4지선다. 지문·표를 읽고 고르면 보기마다 풀이(계산 과정 포함)가 붙습니다. 1~4 로 고르고 Enter 로 다음 문제.",
+      leadTouch: "실제 시험처럼 4지선다. 지문·표를 읽고 고르면 보기마다 풀이(계산 과정 포함)가 붙습니다.",
+      stats: "실전 문제",
+    },
+  } : {
     concept: {
       eyebrow: "Korean History · 1급 · 개념",
       headline: "한 문제씩, 개념부터 단단하게",
@@ -69,9 +93,9 @@
   }
   /** 자료 글의 작은 표식: (가)·(나)는 붉게, __밑줄__ 은 밑줄로 */
   function mark(s) {
-    return esc(s)
-      .replace(/__([^_]+)__/g, "<u>$1</u>")
-      .replace(/\(([가-힣])\)/g, '<b class="blank">($1)</b>');
+    var out = esc(s).replace(/__([^_]+)__/g, "<u>$1</u>");
+    // 투자자산운용사 자료의 "(연)"·"(원)" 같은 단위 표기는 그대로 둔다
+    return IS_INVEST ? out : out.replace(/\(([가-힣])\)/g, '<b class="blank">($1)</b>');
   }
   function $(id) { return document.getElementById(id); }
   var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -116,7 +140,7 @@
         return out;
       }
       // 두 탭이 생기기 전 기록은 개념 문제 기록으로 이어받는다
-      var old = localStorage.getItem(OLD_KEY);
+      var old = OLD_KEY && localStorage.getItem(OLD_KEY);
       if (old) out.concept = cleanStats(JSON.parse(old), "concept");
     } catch (e) {
       /* 사생활 보호 모드 등 — 기록 없이 계속 푼다 */
@@ -162,7 +186,8 @@
     var q = rowOf("exam", id);
     if (!q) return null;
     var fixed = q.fixed || q.choices.every(function (c) { return /^\([가-힣]\)$/.test(String(c).trim()); });
-    var order = fixed ? [0, 1, 2, 3, 4] : shuffle([0, 1, 2, 3, 4]);
+    var idx = q.choices.map(function (c, i) { return i; });
+    var order = fixed ? idx : shuffle(idx);
     return {
       id: id,
       tab: "exam",
@@ -318,8 +343,8 @@
 
   // ---------- 기록 옮기기 ----------
   // 서버가 없어서 기록은 기기마다 따로 남는다. 두 탭 기록을 코드 한 줄로 바꿔 복사·붙여넣기로 옮긴다
-  var CODE_PREFIX = "HANSA2.";
-  var OLD_PREFIX = "HANSA1.";
+  var CODE_PREFIX = IS_INVEST ? "INVEST1." : "HANSA2.";
+  var OLD_PREFIX = IS_INVEST ? "INVEST0." : "HANSA1.";
   function exportText() {
     return CODE_PREFIX + btoa(unescape(encodeURIComponent(JSON.stringify(stats))));
   }
@@ -370,7 +395,7 @@
     var nextStats = parseCode($("importCode").value);
     var btn = $("importBtn");
     if (!nextStats) {
-      moveMsg("코드가 올바르지 않아요. 「HANSA2.」로 시작하는 코드 전체를 붙여 넣으세요.", false);
+      moveMsg("코드가 올바르지 않아요. 「" + CODE_PREFIX + "」로 시작하는 코드 전체를 붙여 넣으세요.", false);
       return;
     }
     if (!importArmed) {
@@ -490,6 +515,15 @@
         html += '<ul class="src-list">' + res.map(function (l) { return "<li>" + mark(l) + "</li>"; }).join("") + "</ul>";
       else html += paragraphs(s.text);
       html += "</div>";
+    } else if (kind === "표") {
+      // 한 줄 = 한 행, 칸은 | 로 나눈다. 첫 줄이 머리글
+      var rows = lines(s.text).map(function (l) { return l.split("|").map(function (c) { return c.trim(); }); });
+      html += '<div class="tbl-wrap"><table class="src-table">' +
+        rows.map(function (r, i) {
+          var tag = i === 0 ? "th" : "td";
+          return "<tr>" + r.map(function (c) { return "<" + tag + ">" + mark(c) + "</" + tag + ">"; }).join("") + "</tr>";
+        }).join("") + "</table></div>";
+      if (s.cite) html += '<p class="src-cite">' + mark(s.cite) + "</p>";
     } else if (kind === "묶음") {
       html += '<div class="packs">';
       lines(s.text).forEach(function (l) {
@@ -498,7 +532,10 @@
       });
       html += "</div>";
     } else {
+      // 지문 · 사례 · 계산 (투자자산운용사)
+      if (s.title) html += '<p class="src-title">' + mark(s.title) + "</p>";
       html += paragraphs(s.text);
+      if (s.cite) html += '<p class="src-cite">' + mark(s.cite) + "</p>";
     }
     return html;
   }
@@ -583,16 +620,24 @@
     $("eraList").innerHTML = ERAS.map(function (e) {
       return (
         '<li class="era-row" data-era="' + e.id + '" style="--c:' + ERA_COLOR[e.id] + '">' +
-        '<span class="era-name">' + esc(e.label) + "</span>" +
+        '<span class="era-name">' + esc(e.short || e.label) + "</span>" +
         '<span class="era-weight num">' + Math.round((e.weight / TOTAL_WEIGHT) * 100) + "%</span>" +
         '<div class="bar"><div></div></div>' +
         '<span class="era-score num">–</span></li>'
       );
     }).join("");
 
-    $("siteFoot").textContent =
-      "한국사능력검정 심화 출제 비중으로 구석기 ~ 노무현 정부 범위에서 개념 " + BANK_SIZE.concept + "문항 · 실전 " + BANK_SIZE.exam +
-      "문항 중 랜덤 출제 · 기록은 이 브라우저에만 저장됩니다";
+    $("siteFoot").textContent = IS_INVEST
+      ? "투자자산운용사 세부과목 출제 비중(100문항 기준)대로 개념 " + BANK_SIZE.concept + "문항 · 실전 " + BANK_SIZE.exam +
+        "문항 중 랜덤 출제 · 문제는 출제 범위를 바탕으로 새로 쓴 것입니다 · 기록은 이 브라우저에만 저장됩니다"
+      : "한국사능력검정 심화 출제 비중으로 구석기 ~ 노무현 정부 범위에서 개념 " + BANK_SIZE.concept + "문항 · 실전 " + BANK_SIZE.exam +
+        "문항 중 랜덤 출제 · 기록은 이 브라우저에만 저장됩니다";
+    $("eraHeadTitle").textContent = IS_INVEST ? "세부과목별" : "시대별";
+    document.querySelectorAll("[data-subject]").forEach(function (el) {
+      var on = el.getAttribute("data-subject") === SUBJECT;
+      el.classList.toggle("is-on", on);
+      if (on) el.setAttribute("aria-current", "page");
+    });
 
     // 1~5 로 고르고 Enter 로 넘어간다. 포커스된 버튼이 Enter 를 한 번 더 먹지 않게 기본 동작을 막는다
     window.addEventListener("keydown", function (e) {
@@ -658,7 +703,7 @@
     $("leadKey").textContent = text.leadKey;
     $("leadTouch").textContent = text.leadTouch;
     $("statsTab").textContent = text.stats;
-    $("maxKey").textContent = tab === "exam" ? "5" : "4";
+    $("maxKey").textContent = tab === "exam" && !IS_INVEST ? "5" : "4";
 
     var panel = $("qPanel");
     panel.classList.toggle("exam", tab === "exam");
@@ -684,13 +729,13 @@
     var era = ERA_BY_ID[q.era];
     document.documentElement.style.setProperty("--era", ERA_COLOR[q.era] || "#d6a44f");
     $("eraChip").textContent = era.label;
-    $("qSub").textContent = tab === "exam" ? (q.source.kind + " · " + q.points + "점") : era.range;
+    $("qSub").textContent = tab === "exam" && q.points ? (q.source.kind + " · " + q.points + "점") : era.range;
     $("wrongModeChip").classList.toggle("hidden", modes[tab] !== "wrong");
     $("qNo").textContent = "No. " + count;
 
     // 자료 (실전만)
     var src = $("src");
-    if (tab === "exam") {
+    if (tab === "exam" && q.source) {
       // 같은 문제를 다시 그릴 때(답을 고를 때)는 자료를 새로 만들지 않는다 — 사진이 깜빡이지 않게
       if (src.dataset.id !== q.id + "#" + count) {
         src.className = "src kind-" + q.source.kind + (q.source.image || q.source.images ? " has-fig" : "");
@@ -703,7 +748,7 @@
       src.dataset.id = "";
     }
 
-    $("qText").innerHTML = mark(q.q) + (tab === "exam" ? '<span class="pts">[' + q.points + "점]</span>" : "");
+    $("qText").innerHTML = mark(q.q) + (tab === "exam" && q.points ? '<span class="pts">[' + q.points + "점]</span>" : "");
 
     // 도장
     var stamp = $("stamp");

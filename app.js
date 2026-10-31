@@ -77,6 +77,7 @@
     swap: '<path d="M4 8h13"/><path d="m14 4 4 4-4 4"/><path d="M20 16H7"/><path d="m10 12-4 4 4 4"/>',
     flame: '<path d="M12 22c4.4 0 7-2.9 7-6.6 0-3.2-2.1-5.2-3.4-7.1-.4 1.6-1.3 2.6-2.4 3.1.2-3-1-6-3.7-7.4.3 2.6-1 4-2.5 5.6C5.6 11.3 5 13 5 15.4 5 19.1 7.6 22 12 22Z"/>',
     search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
+    download: '<path d="M12 4v11"/><path d="m7 10 5 5 5-5"/><path d="M5 20h14"/>',
   };
   function icon(name, size) {
     size = size || 16;
@@ -301,10 +302,56 @@
   }
 
   function switchTab(t) {
-    if (t === tab) return;
+    if (t === "mock") {
+      if (!IS_INVEST) openMock();
+      return;
+    }
+    var wasMock = mockOn;
+    if (mockOn) closeMock();
+    if (t === tab) {
+      if (wasMock) render();
+      return;
+    }
     tab = t;
     count--;
     ask();
+  }
+
+  // ---------- 모의고사 (한국사): 문제지 · 해설지 PDF 내려받기 ----------
+  var mockOn = false;
+  function openMock() {
+    mockOn = true;
+    document.body.classList.add("show-mock");
+    document.querySelectorAll("[data-tab]").forEach(function (el) {
+      var on = el.getAttribute("data-tab") === "mock";
+      el.classList.toggle("tab-active", on);
+      el.setAttribute("aria-selected", on ? "true" : "false");
+    });
+    slide("tabSeg", document.querySelector('[data-tab="mock"]'));
+    $("eyebrow").textContent = "Korean History · 1급 · 모의고사";
+    $("headline").textContent = "인쇄해서, 시험장처럼 80분";
+    $("leadKey").textContent = $("leadTouch").textContent = "회차마다 문제지와 해설지를 따로 내려받을 수 있어요. 언제든 다시 받을 수 있습니다.";
+    $("dock").classList.remove("is-on");
+    var grid = $("mockGrid");
+    if (!grid.childElementCount) {
+      grid.innerHTML = (window.MOCKS || []).map(function (m) {
+        var n = String(m.r).padStart(2, "0");
+        return (
+          '<article class="panel mock-card">' +
+          '<p class="mock-no num">' + m.r + "<small>회</small></p>" +
+          '<p class="mock-meta">50문항 · 100점 · 80분</p>' +
+          '<div class="mock-btns">' +
+          '<a class="btn btn-primary" href="' + esc(m.q) + '" download="한국사 모의고사 ' + n + '회 문제지.pdf"><span data-icon="download"></span>문제 다운로드<small>' + m.qMB + "MB</small></a>" +
+          '<a class="btn" href="' + esc(m.a) + '" download="한국사 모의고사 ' + n + '회 해설지.pdf"><span data-icon="download"></span>해설지 다운로드<small>' + m.aMB + "MB</small></a>" +
+          "</div></article>"
+        );
+      }).join("");
+      grid.querySelectorAll("[data-icon]").forEach(function (el) { el.outerHTML = icon(el.getAttribute("data-icon"), 15); });
+    }
+  }
+  function closeMock() {
+    mockOn = false;
+    document.body.classList.remove("show-mock");
   }
   function switchMode(m) {
     if (m === modes[tab] || (m === "wrong" && !stats[tab].wrong.length)) return;
@@ -571,7 +618,7 @@
     if (!slider.classList.contains("is-ready")) requestAnimationFrame(function () { slider.classList.add("is-ready"); });
   }
   function updateSliders() {
-    slide("tabSeg", document.querySelector('[data-tab="' + tab + '"]'));
+    slide("tabSeg", document.querySelector('[data-tab="' + (mockOn ? "mock" : tab) + '"]'));
     slide("modeSeg", document.querySelector('[data-mode="' + modes[tab] + '"]'));
   }
 
@@ -641,7 +688,7 @@
 
     // 1~5 로 고르고 Enter 로 넘어간다. 포커스된 버튼이 Enter 를 한 번 더 먹지 않게 기본 동작을 막는다
     window.addEventListener("keydown", function (e) {
-      if (e.ctrlKey || e.metaKey || e.altKey) return;
+      if (e.ctrlKey || e.metaKey || e.altKey || mockOn) return;
       var t = e.target;
       if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable)) return;
       if (e.key === "Enter") {

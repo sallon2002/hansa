@@ -31,7 +31,7 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;600;700;800&family=Noto+Serif+KR:wght@400;600;700&family=Nanum+Pen+Script&display=swap"
     />
-    <link rel="stylesheet" href="styles.css?v=20261028" />
+    <link rel="stylesheet" href="styles.css?v=20261031" />
     <!-- 과목: 주소 ?s=invest 면 투자자산운용사, 아니면 한국사 -->
     <script>
       window.SUBJECT = new URLSearchParams(location.search).get("s") === "invest" ? "invest" : "hansa";
@@ -73,6 +73,7 @@
             <span class="seg-slider" aria-hidden="true"></span>
             <button class="tab" role="tab" data-tab="concept">개념 문제</button>
             <button class="tab" role="tab" data-tab="exam">실전 문제</button>
+            <button class="tab tab-mock" role="tab" data-tab="mock">모의고사</button>
           </nav>
           <nav class="seg seg-modes" id="modeSeg" role="tablist" aria-label="출제 방식">
             <span class="seg-slider" aria-hidden="true"></span>
@@ -193,6 +194,14 @@
             </div>
           </div>
         </div>
+        <!-- 모의고사: 회차별 문제지·해설지 PDF 내려받기 (한국사만) -->
+        <section class="mock" id="mockView" aria-label="모의고사">
+          <p class="mock-intro">
+            한능검 심화 모의고사 10회. 회당 50문항 · 100점 · 80분, 1번 선사부터 50번 현대까지 실제 시험 번호 배치 그대로입니다.
+            3급(60점) 합격률이 45~55% 정도 나오도록 쉬움 · 보통 · 어려움을 섞었어요. 문제지를 인쇄해 풀고, 해설지(정답표 · 해설)로 채점하세요.
+          </p>
+          <div class="mock-grid" id="mockGrid"></div>
+        </section>
       </main>
 
       <footer class="site-foot" id="siteFoot"></footer>
@@ -211,7 +220,7 @@
     <!-- 문제 은행: 과목에 따라 골라 읽는다. 새 문제는 각 파일 맨 아래에 덧붙인다 (줄 순서가 오답 노트 id) -->
     <script>
       (function () {
-        var v = "?v=20261028";
+        var v = "?v=20261031";
         var files;
         if (window.SUBJECT === "invest") {
           var ids = ["tax", "products", "realestate", "alt", "global", "analysis", "risk", "ethics", "law", "kofia", "equity", "bond", "deriv", "perf", "macro", "portfolio"];
@@ -222,7 +231,8 @@
           var eras = ["prehistory", "gojoseon", "three", "nambuk", "goryeo", "joseon1", "joseon2", "modern", "colonial", "contemporary"];
           files = ["data/eras.js"]
             .concat(eras.map(function (id) { return "data/" + id + ".js"; }))
-            .concat(eras.map(function (id) { return "data/exam/" + id + ".js"; }));
+            .concat(eras.map(function (id) { return "data/exam/" + id + ".js"; }))
+            .concat(["data/mock.js"]);
         }
         files.push("app.js");
         document.write(files.map(function (f) { return '<script src="' + f + v + '"><\/script>'; }).join(""));

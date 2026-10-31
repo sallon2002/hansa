@@ -2091,3 +2091,70 @@ button:disabled {
     display: none;
   }
 }
+
+/* ---------- 모의고사 (한국사): 회차별 PDF 내려받기 ---------- */
+[data-subject="invest"] .tab-mock {
+  display: none;
+}
+.mock {
+  display: none;
+}
+body.show-mock .mock {
+  display: block;
+}
+body.show-mock .grid,
+body.show-mock .seg-modes,
+body.show-mock .dock {
+  display: none;
+}
+.mock-intro {
+  max-width: 46rem;
+  margin-bottom: 1.2rem;
+  font-size: 0.9rem;
+  line-height: 1.75;
+  color: var(--muted);
+}
+.mock-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: 0.9rem;
+}
+.mock-card {
+  display: grid;
+  gap: 0.35rem;
+  padding: 1.15rem 1.2rem 1.2rem;
+}
+.mock-no {
+  font-family: var(--display);
+  font-size: 2.2rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+.mock-no small {
+  margin-left: 0.15rem;
+  font-family: var(--sans);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+.mock-meta {
+  font-size: 0.8rem;
+  color: var(--muted-2);
+}
+.mock-btns {
+  display: grid;
+  gap: 0.45rem;
+  margin-top: 0.7rem;
+}
+.mock-btns .btn {
+  justify-content: flex-start;
+  padding: 0.6rem 0.9rem;
+  font-size: 0.85rem;
+  text-decoration: none;
+}
+.mock-btns .btn small {
+  margin-left: auto;
+  font-size: 0.72rem;
+  opacity: 0.7;
+}

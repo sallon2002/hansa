@@ -11,6 +11,11 @@
   작업 파일 `work/invest/*.json` → `node tools/invest-merge.js` (처음 한 번. 이후 새 문제는 data 파일 맨 아래에 덧붙인다 — 줄 번호가 오답 노트 id). 검증 수정 기록 `work/invest/fix-*.md`.
 - 실전 자료 꼴: 지문·사례·계산(문단), 표(`a | b | c` 한 줄 = 한 행).
 
+## 한국사 모의고사 탭
+
+한국사 과목의 세 번째 탭. 심화 모의고사 10회의 문제지·해설지 PDF 를 내려받는다(`mock/rNN-q.pdf` · `mock/rNN-a.pdf`, 목록 `data/mock.js`).
+PDF 원본과 만드는 도구는 바탕화면 「한국사 모의고사」 폴더(`node tools/make-pdf.js` → `PDF/`). 고쳤으면 다시 만들어 `mock/` 에 복사하고 `data/mock.js` 의 크기를 맞춘다.
+
 # 한국사 1급 문제 풀이
 
 한국사능력검정 심화(1급) 대비 문제 사이트. 구석기부터 노무현 정부까지,

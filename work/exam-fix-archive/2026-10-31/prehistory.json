@@ -1,0 +1,56 @@
+{
+ "fixes": [
+  {
+   "i": 3,
+   "q": {
+    "era": "prehistory",
+    "points": 3,
+    "source": {
+     "kind": "묶음",
+     "text": "(가) 바닥이 뾰족하고 겉면에 기하학적 무늬를 새긴 토기로, 강가나 바닷가 유적에서 많이 출토된다.\n(나) 검의 몸이 비파 모양으로 가운데가 불룩한 청동 검으로, 고인돌이나 돌널무덤에서 나온다.\n(다) 돌의 양면을 떼어 내 날을 세운 석기로, 사냥과 가죽 손질 등 여러 용도로 쓰였다.",
+     "images": [
+      {
+       "label": "(가)",
+       "src": "images/prehistory-3-1.jpg",
+       "alt": "밑이 뾰족하고 겉면에 짧은 선을 새긴 토기",
+       "credit": "National Museum of Korea · KOGL Type 1",
+       "page": "https://commons.wikimedia.org/wiki/File:빗살무늬토기.jpg"
+      },
+      {
+       "label": "(나)",
+       "src": "images/prehistory-3-2.jpg",
+       "alt": "검의 몸 가운데가 불룩한 청동 검 네 자루",
+       "credit": "hendry (Flickr) · CC BY 2.0",
+       "page": "https://commons.wikimedia.org/wiki/File:Bronze_dagger.jpg"
+      },
+      {
+       "label": "(다)",
+       "src": "images/prehistory-3-3.jpg",
+       "alt": "양면을 떼어 내 끝을 뾰족하게 만든 석기",
+       "credit": "Szilas · CC BY-SA 4.0",
+       "page": "https://commons.wikimedia.org/wiki/File:Stone_hand-axe_from_Korea.jpg"
+      }
+     ]
+    },
+    "stem": "(가)~(다) 유물을 사용된 순서대로 옳게 나열한 것은?",
+    "choices": [
+     "(가) - (나) - (다)",
+     "(가) - (다) - (나)",
+     "(나) - (가) - (다)",
+     "(다) - (가) - (나)",
+     "(다) - (나) - (가)"
+    ],
+    "answer": 3,
+    "notes": [
+     "(가) 빗살무늬 토기(신석기)보다 (다) 주먹도끼(구석기)가 먼저이고, (나) 비파형 동검(청동기)이 가장 늦다.",
+     "(다) 주먹도끼는 구석기 시대 유물로 (가) 빗살무늬 토기보다 앞선다.",
+     "(나) 비파형 동검은 청동기 시대 유물로 세 유물 가운데 가장 늦다.",
+     "(다) 주먹도끼는 구석기, (가) 빗살무늬 토기는 신석기, (나) 비파형 동검은 청동기 시대의 유물이므로 (다)-(가)-(나) 순이다.",
+     "(나) 비파형 동검(청동기)은 (가) 빗살무늬 토기(신석기)보다 늦게 사용되었다."
+    ],
+    "fixed": true
+   },
+   "reason": "사진 교체 필요: (나) images/prehistory-3-2.jpg(Bronze_dagger.jpg) 아래쪽 전시 명패에 「요령식동검(遼寧式銅劍) 청동기시대」가 그대로 찍혀 있어 (나)의 이름과 시대가 드러남 — 명패를 잘라 내거나 명패 없는 비파형 동검 사진으로 교체. 문제 글은 고칠 것 없음."
+  }
+ ]
+}

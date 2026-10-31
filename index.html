@@ -31,7 +31,7 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;600;700;800&family=Noto+Serif+KR:wght@400;600;700&family=Nanum+Pen+Script&display=swap"
     />
-    <link rel="stylesheet" href="styles.css?v=20261031" />
+    <link rel="stylesheet" href="styles.css?v=20261031b" />
     <!-- 과목: 주소 ?s=invest 면 투자자산운용사, 아니면 한국사 -->
     <script>
       window.SUBJECT = new URLSearchParams(location.search).get("s") === "invest" ? "invest" : "hansa";
@@ -220,7 +220,7 @@
     <!-- 문제 은행: 과목에 따라 골라 읽는다. 새 문제는 각 파일 맨 아래에 덧붙인다 (줄 순서가 오답 노트 id) -->
     <script>
       (function () {
-        var v = "?v=20261031";
+        var v = "?v=20261031b";
         var files;
         if (window.SUBJECT === "invest") {
           var ids = ["tax", "products", "realestate", "alt", "global", "analysis", "risk", "ethics", "law", "kofia", "equity", "bond", "deriv", "perf", "macro", "portfolio"];

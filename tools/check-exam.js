@@ -75,6 +75,7 @@ function checkOne(q, i) {
     }
     const lines = text.split("\n").map((l) => l.trim()).filter(Boolean);
     if (s.kind === "연표") {
+      if (lines.some((l) => /\([가-힣]\)/.test(l))) errs.push(`${tag}: 연표 글에 (가) 같은 구간 표시를 쓰지 말 것 (화면이 자동으로 붙임)`);
       if (lines.length < 5 || lines.length > 6) errs.push(`${tag}: 연표는 사건 5~6개를 한 줄씩 (지금 ${lines.length}줄)`);
       if (!s.lead) warns.push(`${tag}: 연표에 lead(다음 사실 상자)가 없음`);
     }

@@ -2,72 +2,72 @@
 window.MOCKS = [
  {
   "r": 1,
-  "q": "mock/r01-q.pdf",
+  "q": "mock/r01-q.pdf?v=2",
   "qMB": 6.3,
-  "a": "mock/r01-a.pdf",
+  "a": "mock/r01-a.pdf?v=2",
   "aMB": 1.9
  },
  {
   "r": 2,
-  "q": "mock/r02-q.pdf",
+  "q": "mock/r02-q.pdf?v=2",
   "qMB": 10.1,
-  "a": "mock/r02-a.pdf",
+  "a": "mock/r02-a.pdf?v=2",
   "aMB": 1.8
  },
  {
   "r": 3,
-  "q": "mock/r03-q.pdf",
+  "q": "mock/r03-q.pdf?v=2",
   "qMB": 9.6,
-  "a": "mock/r03-a.pdf",
+  "a": "mock/r03-a.pdf?v=2",
   "aMB": 1.9
  },
  {
   "r": 4,
-  "q": "mock/r04-q.pdf",
+  "q": "mock/r04-q.pdf?v=2",
   "qMB": 8.3,
-  "a": "mock/r04-a.pdf",
+  "a": "mock/r04-a.pdf?v=2",
   "aMB": 1.9
  },
  {
   "r": 5,
-  "q": "mock/r05-q.pdf",
+  "q": "mock/r05-q.pdf?v=2",
   "qMB": 6.9,
-  "a": "mock/r05-a.pdf",
+  "a": "mock/r05-a.pdf?v=2",
   "aMB": 1.9
  },
  {
   "r": 6,
-  "q": "mock/r06-q.pdf",
+  "q": "mock/r06-q.pdf?v=2",
   "qMB": 8,
-  "a": "mock/r06-a.pdf",
+  "a": "mock/r06-a.pdf?v=2",
   "aMB": 1.9
  },
  {
   "r": 7,
-  "q": "mock/r07-q.pdf",
+  "q": "mock/r07-q.pdf?v=2",
   "qMB": 9,
-  "a": "mock/r07-a.pdf",
+  "a": "mock/r07-a.pdf?v=2",
   "aMB": 1.9
  },
  {
   "r": 8,
-  "q": "mock/r08-q.pdf",
+  "q": "mock/r08-q.pdf?v=2",
   "qMB": 9.8,
-  "a": "mock/r08-a.pdf",
+  "a": "mock/r08-a.pdf?v=2",
   "aMB": 1.9
  },
  {
   "r": 9,
-  "q": "mock/r09-q.pdf",
-  "qMB": 7.1,
-  "a": "mock/r09-a.pdf",
+  "q": "mock/r09-q.pdf?v=2",
+  "qMB": 7.4,
+  "a": "mock/r09-a.pdf?v=2",
   "aMB": 1.8
  },
  {
   "r": 10,
-  "q": "mock/r10-q.pdf",
+  "q": "mock/r10-q.pdf?v=2",
   "qMB": 6.6,
-  "a": "mock/r10-a.pdf",
+  "a": "mock/r10-a.pdf?v=2",
   "aMB": 1.8
  }
 ];

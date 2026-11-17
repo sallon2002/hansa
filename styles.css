@@ -563,6 +563,13 @@ button:disabled {
 .q-text .blank {
   color: var(--accent-2);
 }
+.q-text .q-ask {
+  display: block;
+  margin-top: 0.55rem;
+  font-size: 0.8em;
+  font-weight: 550;
+  color: var(--muted);
+}
 .q-text .pts {
   margin-left: 0.4rem;
   font-size: 0.78rem;
@@ -2093,7 +2100,8 @@ button:disabled {
 }
 
 /* ---------- 모의고사 (한국사): 회차별 PDF 내려받기 ---------- */
-[data-subject="invest"] .tab-mock {
+[data-subject="invest"] .tab-mock,
+[data-subject="invest"] .tab-seonji {
   display: none;
 }
 .mock {

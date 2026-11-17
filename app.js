@@ -1,11 +1,13 @@
 // 한국사 1급 문제 풀이 — 화면 동작 전부.
-// 개념 문제는 data/*.js 가 window.BANK 에, 실전 문제는 data/exam/*.js 가 window.EXAM 에 올려 둔다.
+// 개념 문제는 data/*.js 가 window.BANK 에, 실전 문제는 data/exam/*.js 가 window.EXAM 에,
+// 선지 선별(한국사)은 data/seonji/*.js 가 window.SEONJI 에 올려 둔다.
 (function () {
   "use strict";
 
   var ERAS = window.ERAS;
   var BANK = window.BANK || {};
   var EXAM = window.EXAM || {};
+  var SEONJI = window.SEONJI || {};
   // 과목: index.html 이 주소(?s=invest)를 보고 정해 둔다. 과목마다 문제·기록·기록 옮기기 코드가 따로다
   var SUBJECT = window.SUBJECT === "invest" ? "invest" : "hansa";
   var IS_INVEST = SUBJECT === "invest";
@@ -67,6 +69,13 @@
       leadTouch: "한능검 심화 기출 유형 그대로. 자료를 읽고 다섯 보기 중 하나를 누르세요. 보기 다섯은 모두 실제 사실 — 자료와 맞는 하나만 정답이에요.",
       stats: "실전 문제",
     },
+    seonji: {
+      eyebrow: "Korean History · 선지 선별",
+      headline: "이 선지, 누구 이야기일까",
+      leadKey: "시험에 자주 나오는 선지 한 줄을 보고 해당하는 시대·왕·나라·기구를 네 보기 중에서 고릅니다. 1~4 로 고르고 Enter 로 다음 문제.",
+      leadTouch: "시험에 자주 나오는 선지 한 줄을 보고 해당하는 시대·왕·나라·기구를 네 보기 중에서 고릅니다.",
+      stats: "선지 선별",
+    },
   };
 
   var ICONS = {
@@ -98,6 +107,13 @@
     // 투자자산운용사 자료의 "(연)"·"(원)" 같은 단위 표기는 그대로 둔다
     return IS_INVEST ? out : out.replace(/\(([가-힣])\)/g, '<b class="blank">($1)</b>');
   }
+  /** 여러 줄 문제(선지 선별): 앞줄은 선지·사건, 마지막 줄은 묻는 말이라 작게 */
+  function qHtml(s) {
+    var lines = String(s).split("\n");
+    if (lines.length < 2) return mark(s);
+    var ask = lines.pop();
+    return lines.map(mark).join("<br>") + '<span class="q-ask">' + mark(ask) + "</span>";
+  }
   function $(id) { return document.getElementById(id); }
   var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   /** 애니메이션 클래스를 떼었다 다시 붙여 처음부터 재생한다 */
@@ -108,12 +124,13 @@
   }
 
   // ---------- 문제 은행 ----------
-  var BANK_SIZE = { concept: 0, exam: 0 };
+  var BANK_SIZE = { concept: 0, exam: 0, seonji: 0 };
   ERAS.forEach(function (e) {
     BANK_SIZE.concept += (BANK[e.id] || []).length;
     BANK_SIZE.exam += (EXAM[e.id] || []).length;
+    BANK_SIZE.seonji += (SEONJI[e.id] || []).length;
   });
-  function bankOf(tab) { return tab === "exam" ? EXAM : BANK; }
+  function bankOf(tab) { return tab === "exam" ? EXAM : tab === "seonji" ? SEONJI : BANK; }
   /** id 는 "시대:줄번호" */
   function rowOf(tab, id) {
     var p = id.split(":");
@@ -131,13 +148,14 @@
     return s;
   }
   function loadStats() {
-    var out = { concept: emptyStats(), exam: emptyStats() };
+    var out = { concept: emptyStats(), exam: emptyStats(), seonji: emptyStats() };
     try {
       var raw = localStorage.getItem(STORE_KEY);
       if (raw) {
         var v2 = JSON.parse(raw);
         out.concept = cleanStats(v2.concept, "concept");
         out.exam = cleanStats(v2.exam, "exam");
+        out.seonji = cleanStats(v2.seonji, "seonji");
         return out;
       }
       // 두 탭이 생기기 전 기록은 개념 문제 기록으로 이어받는다
@@ -165,9 +183,10 @@
     }
     return a;
   }
-  /** 개념 문제: 보기는 낼 때마다 섞고, 정답은 데이터에서 늘 두 번째 칸, 7~9번째 칸은 오답 풀이 */
-  function buildConcept(id) {
-    var row = rowOf("concept", id);
+  /** 개념 문제·선지 선별: 보기는 낼 때마다 섞고, 정답은 데이터에서 늘 두 번째 칸, 7~9번째 칸은 오답 풀이 */
+  function buildConcept(id, t) {
+    t = t || "concept";
+    var row = rowOf(t, id);
     if (!row) return null;
     var notesBy = {};
     notesBy[row[2]] = row[6] || "";
@@ -180,7 +199,7 @@
       var dash = n.indexOf(" — ");
       return dash >= 0 ? n.slice(dash + 3) : n;
     });
-    return { id: id, tab: "concept", era: id.split(":")[0], q: row[0], choices: choices, answer: choices.indexOf(row[1]), notes: notes };
+    return { id: id, tab: t, era: id.split(":")[0], q: row[0], choices: choices, answer: choices.indexOf(row[1]), notes: notes };
   }
   /** 실전 문제: 다섯 보기. (가)~(마) 처럼 자리가 뜻을 갖는 보기는 섞지 않는다 */
   function buildExam(id) {
@@ -202,7 +221,7 @@
     };
   }
   function build(tab, id) {
-    return tab === "exam" ? buildExam(id) : buildConcept(id);
+    return tab === "exam" ? buildExam(id) : buildConcept(id, tab);
   }
   /** 출제 비중대로 시대를 하나 고른다 — 그 탭에 문제가 있는 시대만 */
   function pickEra(tab) {
@@ -217,7 +236,7 @@
     return pool[pool.length - 1].id;
   }
   /** 탭·시대마다 이번에 이미 낸 줄 번호. 다 돌면 비우고 다시 돈다 */
-  var seen = { concept: {}, exam: {} };
+  var seen = { concept: {}, exam: {}, seonji: {} };
   function nextId(tab, prevId) {
     var st = stats[tab];
     if (modes[tab] === "wrong" && st.wrong.length) {
@@ -244,7 +263,7 @@
   // ---------- 상태 ----------
   var stats = loadStats();
   var tab = "concept";
-  var modes = { concept: "all", exam: "all" };
+  var modes = { concept: "all", exam: "all", seonji: "all" };
   var current = null;
   var picked = null;
   var count = 0;
@@ -403,8 +422,9 @@
       var s = JSON.parse(decodeURIComponent(escape(atob(t.slice(prefix.length)))));
       if (typeof s !== "object" || !s) return null;
       // 예전 코드(개념 문제만)는 개념 기록만 바꾸고 실전 기록은 둔다
-      if (prefix === OLD_PREFIX) return { concept: cleanStats(s, "concept"), exam: stats.exam };
-      return { concept: cleanStats(s.concept, "concept"), exam: cleanStats(s.exam, "exam") };
+      if (prefix === OLD_PREFIX) return { concept: cleanStats(s, "concept"), exam: stats.exam, seonji: stats.seonji };
+      // 선지 선별이 생기기 전 코드에는 seonji 가 없다 — 그 기록은 이 기기 것을 둔다
+      return { concept: cleanStats(s.concept, "concept"), exam: cleanStats(s.exam, "exam"), seonji: s.seonji ? cleanStats(s.seonji, "seonji") : stats.seonji };
     } catch (e) {
       return null;
     }
@@ -795,7 +815,7 @@
       src.dataset.id = "";
     }
 
-    $("qText").innerHTML = mark(q.q) + (tab === "exam" && q.points ? '<span class="pts">[' + q.points + "점]</span>" : "");
+    $("qText").innerHTML = qHtml(q.q) + (tab === "exam" && q.points ? '<span class="pts">[' + q.points + "점]</span>" : "");
 
     // 도장
     var stamp = $("stamp");

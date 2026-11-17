@@ -157,6 +157,9 @@
       });
       s.read = read;
       s.rounds = s.rounds > 0 ? Math.floor(s.rounds) : 0;
+      s.again = (Array.isArray(s.again) ? s.again : []).filter(function (a) {
+        return a && typeof a.id === "string" && !!rowOf("seonji", a.id) && (a.step === 1 || a.step === 2) && typeof a.at === "number";
+      });
     }
     return s;
   }
@@ -279,6 +282,14 @@
   /** 선지 선별 전체 랜덤: 이번 바퀴에 아직 안 푼 문항만, 시대 비중 없이 고르게. 오답 노트 문제도 끼우지 않는다.
    *  다 풀면 한 바퀴(rounds)를 올리고 처음부터 다시 돈다 */
   function nextUnread(st, prevId) {
+    // 틀린 선지는 20문제 뒤, 그걸 맞히면 60문제 뒤에 다시 낸다 (st.again: {id, at: 몇 번째 풀이 뒤, step 1·2})
+    var again = st.again || (st.again = []);
+    var due = null;
+    again.forEach(function (a) { if (a.at <= st.solved && a.id !== prevId && (!due || a.at < due.at)) due = a; });
+    if (due) {
+      notice = due.step === 1 ? "20문제 전에 틀린 선지예요. 이번엔 맞혀 보세요." : "한 번 더 확인 (60문제 전에 다시 맞힌 선지) — 맞히면 오답 노트에서 빠져요.";
+      return due.id;
+    }
     var read = st.read || (st.read = {});
     var left = [];
     ERAS.forEach(function (e) {
@@ -288,7 +299,8 @@
       for (var i = 0; i < rows.length; i++) if (!done[i] && e.id + ":" + i !== prevId) left.push(e.id + ":" + i);
     });
     if (left.length) return left[Math.floor(Math.random() * left.length)];
-    // 1회독 끝: 틀린 게 남았으면 오답 노트로 넘어가 비우고, 하나도 없으면 다음 바퀴
+    // 1회독 끝: 틀린 게 남았으면(다시 보기 대기 중인 것 포함) 오답 노트로 넘어가 한 번씩 맞혀 비우고, 하나도 없으면 다음 바퀴
+    st.again = [];
     if (st.wrong.length) {
       modes.seonji = "wrong";
       notice = "전체 선지 1회독 완료! 남은 오답 " + st.wrong.length + "개를 바로 정리합니다. 한 번 맞히면 노트에서 빠져요.";
@@ -345,8 +357,29 @@
     st.streak = ok ? st.streak + 1 : 0;
     st.best = Math.max(st.best, st.streak);
     var at = st.wrong.indexOf(current.id);
-    if (ok && at >= 0) st.wrong.splice(at, 1);
-    if (!ok && at < 0) st.wrong.push(current.id);
+    if (tab === "seonji" && modes.seonji === "all") {
+      // 선지 선별 1회독: 틀리면 20문제 뒤 → 맞히면 60문제 뒤 → 또 맞히면 오답 노트에서 뺀다. 중간에 틀리면 20문제 뒤부터 다시
+      var again = st.again || (st.again = []);
+      var ai = -1;
+      again.forEach(function (a, k) { if (a.id === current.id) ai = k; });
+      if (!ok) {
+        var a1 = { id: current.id, at: st.solved + 20, step: 1 };
+        if (ai >= 0) again[ai] = a1; else again.push(a1);
+        if (at < 0) st.wrong.push(current.id);
+      } else if (ai >= 0 && again[ai].step === 1) {
+        again[ai] = { id: current.id, at: st.solved + 60, step: 2 };
+      } else {
+        if (ai >= 0) again.splice(ai, 1);
+        if (at >= 0) st.wrong.splice(at, 1);
+      }
+    } else {
+      if (ok && at >= 0) st.wrong.splice(at, 1);
+      if (!ok && at < 0) st.wrong.push(current.id);
+      // 오답 노트에서 맞혀 뺀 선지는 다시 보기 대기에서도 뺀다
+      if (tab === "seonji" && ok && stats.seonji.again) {
+        stats.seonji.again = stats.seonji.again.filter(function (a) { return a.id !== current.id; });
+      }
+    }
     if (tab === "seonji") {
       // 풀었으면(맞든 틀리든) 이번 바퀴에서는 다시 내지 않는다 — 틀린 건 오답 노트에서 따로 푼다
       var p = current.id.split(":");

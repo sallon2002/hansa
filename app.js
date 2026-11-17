@@ -145,7 +145,23 @@
   function cleanStats(s, tab) {
     s = Object.assign(emptyStats(), s || {});
     s.wrong = (Array.isArray(s.wrong) ? s.wrong : []).filter(function (id) { return typeof id === "string" && !!rowOf(tab, id); });
+    if (tab === "seonji") {
+      // 1회독 진도: 시대마다 이번 바퀴에 푼 줄 번호. 기록에 남아 앱을 다시 열어도 이어서 낸다
+      var read = {};
+      var r = s.read && typeof s.read === "object" ? s.read : {};
+      Object.keys(r).forEach(function (era) {
+        var rows = SEONJI[era];
+        if (!rows || !Array.isArray(r[era])) return;
+        var ok = r[era].filter(function (i, k, a) { return i >= 0 && i < rows.length && a.indexOf(i) === k; });
+        if (ok.length) read[era] = ok;
+      });
+      s.read = read;
+      s.rounds = s.rounds > 0 ? Math.floor(s.rounds) : 0;
+    }
     return s;
+  }
+  function readCount(st) {
+    return Object.keys(st.read || {}).reduce(function (n, era) { return n + st.read[era].length; }, 0);
   }
   function loadStats() {
     var out = { concept: emptyStats(), exam: emptyStats(), seonji: emptyStats() };
@@ -243,6 +259,7 @@
       var pool = st.wrong.length > 1 ? st.wrong.filter(function (id) { return id !== prevId; }) : st.wrong;
       return pool[Math.floor(Math.random() * pool.length)];
     }
+    if (tab === "seonji") return nextUnread(st, prevId);
     // 전체 랜덤에서도 오답 노트 문제가 아주 조금 더 자주 나온다: 다른 문제보다 약 1.2배.
     // 티 나지 않게 한 번에 붙는 확률은 6% 를 넘지 않는다. 맞히면 choose() 가 노트에서 지운다
     var wrongPool = st.wrong.filter(function (id) { return id !== prevId; });
@@ -259,6 +276,35 @@
     used[idx] = true;
     return era + ":" + idx;
   }
+  /** 선지 선별 전체 랜덤: 이번 바퀴에 아직 안 푼 문항만, 시대 비중 없이 고르게. 오답 노트 문제도 끼우지 않는다.
+   *  다 풀면 한 바퀴(rounds)를 올리고 처음부터 다시 돈다 */
+  function nextUnread(st, prevId) {
+    var read = st.read || (st.read = {});
+    var left = [];
+    ERAS.forEach(function (e) {
+      var rows = SEONJI[e.id] || [];
+      var done = {};
+      (read[e.id] || []).forEach(function (i) { done[i] = true; });
+      for (var i = 0; i < rows.length; i++) if (!done[i] && e.id + ":" + i !== prevId) left.push(e.id + ":" + i);
+    });
+    if (left.length) return left[Math.floor(Math.random() * left.length)];
+    // 1회독 끝: 틀린 게 남았으면 오답 노트로 넘어가 비우고, 하나도 없으면 다음 바퀴
+    if (st.wrong.length) {
+      modes.seonji = "wrong";
+      notice = "전체 선지 1회독 완료! 남은 오답 " + st.wrong.length + "개를 바로 정리합니다. 한 번 맞히면 노트에서 빠져요.";
+      return nextId("seonji", prevId);
+    }
+    newRound(st);
+    notice = "모든 선지를 다 맞혔어요! " + (st.rounds + 1) + "회독을 처음부터 시작합니다.";
+    return nextUnread(st, prevId);
+  }
+  function newRound(st) {
+    st.read = {};
+    st.rounds = (st.rounds || 0) + 1;
+    saveStats();
+  }
+  /** 다음 문제 위에 한 번만 띄울 안내 (선지 선별 단계 전환) */
+  var notice = "";
 
   // ---------- 상태 ----------
   var stats = loadStats();
@@ -272,6 +318,10 @@
   function ask() {
     if (!BANK_SIZE[tab]) { current = null; picked = null; render(); return; }
     current = build(tab, nextId(tab, current && current.tab === tab ? current.id : null));
+    var nt = $("qNotice");
+    nt.textContent = notice;
+    nt.classList.toggle("hidden", !notice);
+    notice = "";
     picked = null;
     count++;
     render();
@@ -297,6 +347,13 @@
     var at = st.wrong.indexOf(current.id);
     if (ok && at >= 0) st.wrong.splice(at, 1);
     if (!ok && at < 0) st.wrong.push(current.id);
+    if (tab === "seonji") {
+      // 풀었으면(맞든 틀리든) 이번 바퀴에서는 다시 내지 않는다 — 틀린 건 오답 노트에서 따로 푼다
+      var p = current.id.split(":");
+      var rd = st.read || (st.read = {});
+      var list = rd[p[0]] || (rd[p[0]] = []);
+      if (list.indexOf(Number(p[1])) < 0) list.push(Number(p[1]));
+    }
     saveStats();
     render();
     justAnswered = false;
@@ -305,7 +362,18 @@
   function next() {
     if (picked === null) return;
     // 오답 노트를 다 맞혀 비었으면 전체 랜덤으로 돌아간다
-    if (modes[tab] === "wrong" && !stats[tab].wrong.length) modes[tab] = "all";
+    if (modes[tab] === "wrong" && !stats[tab].wrong.length) {
+      modes[tab] = "all";
+      if (tab === "seonji") {
+        var st = stats.seonji;
+        if (readCount(st) >= BANK_SIZE.seonji) {
+          newRound(st);
+          notice = "오답 노트까지 모두 비웠어요! " + (st.rounds + 1) + "회독을 처음부터 시작합니다.";
+        } else {
+          notice = "오답 노트를 모두 비웠어요! 남은 " + (BANK_SIZE.seonji - readCount(st)) + "개 선지로 돌아갑니다.";
+        }
+      }
+    }
     ask();
     // 방금 클릭한 보기 자리에 포커스 테두리가 남으면 새 문제에서 미리 고른 것처럼 보인다
     if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
@@ -866,7 +934,9 @@
   function renderStats(st, currentEra) {
     var rate = st.solved ? Math.round((st.correct / st.solved) * 100) : null;
     $("statSolved").textContent = st.solved;
-    $("statBank").textContent = "전체 " + BANK_SIZE[tab] + "문항";
+    $("statBank").textContent = tab === "seonji"
+      ? (st.rounds ? st.rounds + 1 + "회독 " : "1회독 ") + readCount(st) + " / " + BANK_SIZE.seonji
+      : "전체 " + BANK_SIZE[tab] + "문항";
     $("statRate").textContent = rate === null ? "–" : rate + "%";
     var ring = $("ringFg");
     ring.style.strokeDashoffset = 100 - (rate || 0);

@@ -287,7 +287,7 @@
     var due = null;
     again.forEach(function (a) { if (a.at <= st.solved && a.id !== prevId && (!due || a.at < due.at)) due = a; });
     if (due) {
-      notice = due.step === 1 ? "20문제 전에 틀린 선지예요. 이번엔 맞혀 보세요." : "한 번 더 확인 (60문제 전에 다시 맞힌 선지) — 맞히면 오답 노트에서 빠져요.";
+      notice = due.step === 1 ? "앞에서 틀린 선지예요. 이번엔 맞혀 보세요." : "한 번 더 확인 — 앞에서 다시 맞힌 선지예요. 이번에도 맞히면 오답 노트에서 빠져요.";
       return due.id;
     }
     var read = st.read || (st.read = {});
@@ -799,7 +799,7 @@
       ? "투자자산운용사 세부과목 출제 비중(100문항 기준)대로 개념 " + BANK_SIZE.concept + "문항 · 실전 " + BANK_SIZE.exam +
         "문항 중 랜덤 출제 · 문제는 출제 범위를 바탕으로 새로 쓴 것입니다 · 기록은 이 브라우저에만 저장됩니다"
       : "한국사능력검정 심화 출제 비중으로 구석기 ~ 노무현 정부 범위에서 개념 " + BANK_SIZE.concept + "문항 · 실전 " + BANK_SIZE.exam +
-        "문항 중 랜덤 출제 · 기록은 이 브라우저에만 저장됩니다";
+        "문항 중 랜덤 출제 · 선지 선별 " + BANK_SIZE.seonji + "문항 · 기록은 이 브라우저에만 저장됩니다";
     $("eraHeadTitle").textContent = IS_INVEST ? "세부과목별" : "시대별";
     document.querySelectorAll("[data-subject]").forEach(function (el) {
       var on = el.getAttribute("data-subject") === SUBJECT;
@@ -895,9 +895,11 @@
     }
 
     var era = ERA_BY_ID[q.era];
-    document.documentElement.style.setProperty("--era", ERA_COLOR[q.era] || "#d6a44f");
-    $("eraChip").textContent = era.label;
-    $("qSub").textContent = tab === "exam" && q.points ? (q.source.kind + " · " + q.points + "점") : era.range;
+    // 선지 선별은 「어느 시대·나라인가」를 묻는 문항이 많아, 시대 표시(칩·범위·색·기록 칸 강조)가 답을 알려 준다 — 고른 뒤에만 보인다
+    var hideEra = tab === "seonji" && !answered;
+    document.documentElement.style.setProperty("--era", hideEra ? "var(--accent)" : ERA_COLOR[q.era] || "#d6a44f");
+    $("eraChip").textContent = hideEra ? "선지" : era.label;
+    $("qSub").textContent = hideEra ? "" : tab === "exam" && q.points ? (q.source.kind + " · " + q.points + "점") : era.range;
     $("wrongModeChip").classList.toggle("hidden", modes[tab] !== "wrong");
     $("qNo").textContent = "No. " + count;
 
@@ -961,7 +963,7 @@
     dock.setAttribute("aria-hidden", answered ? "false" : "true");
     $("dockBtn").tabIndex = answered ? 0 : -1;
 
-    renderStats(st, q.era);
+    renderStats(st, hideEra ? null : q.era);
   }
 
   function renderStats(st, currentEra) {

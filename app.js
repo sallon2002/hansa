@@ -335,6 +335,7 @@
     nt.classList.toggle("hidden", !notice);
     notice = "";
     picked = null;
+    unsureMarked = false;
     count++;
     render();
     replay($("qBody"), "enter");
@@ -390,6 +391,27 @@
     saveStats();
     render();
     justAnswered = false;
+  }
+
+  /** 맞혔지만 헷갈린(찍은) 문제: 틀린 것처럼 기록하고 오답 노트에 넣는다.
+   *  선지 선별 1회독에서는 틀렸을 때처럼 20문제 뒤 → 60문제 뒤 다시 보기를 처음부터 건다 */
+  var unsureMarked = false;
+  function markUnsure() {
+    if (!current || picked === null || picked !== current.answer || unsureMarked) return;
+    unsureMarked = true;
+    var st = stats[tab];
+    var e = st.byEra[current.era];
+    if (e && e.c > 0) e.c--;
+    if (st.correct > 0) st.correct--;
+    st.streak = 0;
+    if (st.wrong.indexOf(current.id) < 0) st.wrong.push(current.id);
+    if (tab === "seonji" && modes.seonji === "all") {
+      var again = (st.again || (st.again = [])).filter(function (a) { return a.id !== current.id; });
+      again.push({ id: current.id, at: st.solved + 20, step: 1 });
+      st.again = again;
+    }
+    saveStats();
+    render();
   }
 
   function next() {
@@ -779,6 +801,7 @@
     });
     $("nextBtn").addEventListener("click", next);
     $("dockBtn").addEventListener("click", next);
+    $("unsureBtn").addEventListener("click", markUnsure);
     $("resetBtn").addEventListener("click", reset);
     $("moveBtn").addEventListener("click", toggleMove);
     $("copyBtn").addEventListener("click", copyCode);
@@ -962,6 +985,12 @@
     dock.classList.toggle("is-on", answered);
     dock.setAttribute("aria-hidden", answered ? "false" : "true");
     $("dockBtn").tabIndex = answered ? 0 : -1;
+
+    // 맞혔을 때만: 찍어서 맞힌 거면 오답 노트로 보낼 수 있게
+    var ub = $("unsureBtn");
+    ub.classList.toggle("hidden", !right);
+    ub.disabled = unsureMarked;
+    ub.textContent = unsureMarked ? "오답 노트에 넣었어요" : "헷갈렸어요 · 오답 노트에 넣기";
 
     renderStats(st, hideEra ? null : q.era);
   }

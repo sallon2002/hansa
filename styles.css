@@ -872,18 +872,33 @@ button:disabled {
 .q-foot .btn {
   margin-left: auto;
 }
-.unsure-btn {
+.after-btns {
   display: flex;
-  width: 100%;
+  gap: 0.5rem;
+}
+.unsure-btn,
+.skip-btn {
+  display: flex;
+  flex: 1 1 0;
+  min-width: 0;
   justify-content: center;
   margin-top: 0.75rem;
-  padding: 0.7rem 1rem;
+  padding: 0.7rem 0.75rem;
   font-size: 0.875rem;
+  text-align: center;
+}
+.unsure-btn {
   color: var(--down);
   background: var(--down-soft);
   box-shadow: inset 0 0 0 1px var(--down-line);
 }
-.unsure-btn.hidden {
+.skip-btn {
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.04);
+  box-shadow: inset 0 0 0 1px var(--line-strong);
+}
+.unsure-btn.hidden,
+.skip-btn.hidden {
   display: none;
 }
 .unsure-btn:disabled {

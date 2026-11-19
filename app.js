@@ -157,14 +157,27 @@
       });
       s.read = read;
       s.rounds = s.rounds > 0 ? Math.floor(s.rounds) : 0;
+      s.skip = (Array.isArray(s.skip) ? s.skip : []).filter(function (id, k, a) { return typeof id === "string" && !!rowOf("seonji", id) && a.indexOf(id) === k; });
       s.again = (Array.isArray(s.again) ? s.again : []).filter(function (a) {
         return a && typeof a.id === "string" && !!rowOf("seonji", a.id) && (a.step === 1 || a.step === 2) && typeof a.at === "number";
       });
     }
     return s;
   }
+  /** 버린 선지(st.skip)는 1회독 대상에서 빠진다 */
+  function skipSet(st) {
+    var o = {};
+    (st.skip || []).forEach(function (id) { o[id] = true; });
+    return o;
+  }
   function readCount(st) {
-    return Object.keys(st.read || {}).reduce(function (n, era) { return n + st.read[era].length; }, 0);
+    var sk = skipSet(st);
+    return Object.keys(st.read || {}).reduce(function (n, era) {
+      return n + st.read[era].filter(function (i) { return !sk[era + ":" + i]; }).length;
+    }, 0);
+  }
+  function roundTotal(st) {
+    return BANK_SIZE.seonji - (st.skip || []).length;
   }
   function loadStats() {
     var out = { concept: emptyStats(), exam: emptyStats(), seonji: emptyStats() };
@@ -291,14 +304,16 @@
       return due.id;
     }
     var read = st.read || (st.read = {});
+    var sk = skipSet(st);
     var left = [];
     ERAS.forEach(function (e) {
       var rows = SEONJI[e.id] || [];
       var done = {};
       (read[e.id] || []).forEach(function (i) { done[i] = true; });
-      for (var i = 0; i < rows.length; i++) if (!done[i] && e.id + ":" + i !== prevId) left.push(e.id + ":" + i);
+      for (var i = 0; i < rows.length; i++) if (!done[i] && !sk[e.id + ":" + i] && e.id + ":" + i !== prevId) left.push(e.id + ":" + i);
     });
     if (left.length) return left[Math.floor(Math.random() * left.length)];
+    if (roundTotal(st) <= 0) return prevId || ERAS[0].id + ":0"; // 전부 버렸으면 더 낼 게 없다
     // 1회독 끝: 틀린 게 남았으면(다시 보기 대기 중인 것 포함) 오답 노트로 넘어가 한 번씩 맞혀 비우고, 하나도 없으면 다음 바퀴
     st.again = [];
     if (st.wrong.length) {
@@ -414,6 +429,23 @@
     render();
   }
 
+  /** 버리기(선지 선별): 안 외울 선지 — 맞힌 것으로 치고, 오답 노트·다시 보기에서 빼고, 앞으로 다시 내지 않는다 */
+  function markSkip() {
+    if (tab !== "seonji" || !current || picked === null) return;
+    var st = stats.seonji;
+    if (picked !== current.answer || unsureMarked) {
+      var e = st.byEra[current.era] || (st.byEra[current.era] = { t: 0, c: 0 });
+      e.c = Math.min(e.t, e.c + 1);
+      st.correct = Math.min(st.solved, st.correct + 1);
+    }
+    st.wrong = st.wrong.filter(function (id) { return id !== current.id; });
+    st.again = (st.again || []).filter(function (a) { return a.id !== current.id; });
+    st.skip = st.skip || [];
+    if (st.skip.indexOf(current.id) < 0) st.skip.push(current.id);
+    saveStats();
+    next();
+  }
+
   function next() {
     if (picked === null) return;
     // 오답 노트를 다 맞혀 비었으면 전체 랜덤으로 돌아간다
@@ -421,11 +453,11 @@
       modes[tab] = "all";
       if (tab === "seonji") {
         var st = stats.seonji;
-        if (readCount(st) >= BANK_SIZE.seonji) {
+        if (readCount(st) >= roundTotal(st)) {
           newRound(st);
           notice = "오답 노트까지 모두 비웠어요! " + (st.rounds + 1) + "회독을 처음부터 시작합니다.";
         } else {
-          notice = "오답 노트를 모두 비웠어요! 남은 " + (BANK_SIZE.seonji - readCount(st)) + "개 선지로 돌아갑니다.";
+          notice = "오답 노트를 모두 비웠어요! 남은 " + (roundTotal(st) - readCount(st)) + "개 선지로 돌아갑니다.";
         }
       }
     }
@@ -802,6 +834,7 @@
     $("nextBtn").addEventListener("click", next);
     $("dockBtn").addEventListener("click", next);
     $("unsureBtn").addEventListener("click", markUnsure);
+    $("skipBtn").addEventListener("click", markSkip);
     $("resetBtn").addEventListener("click", reset);
     $("moveBtn").addEventListener("click", toggleMove);
     $("copyBtn").addEventListener("click", copyCode);
@@ -991,6 +1024,7 @@
     ub.classList.toggle("hidden", !right);
     ub.disabled = unsureMarked;
     ub.textContent = unsureMarked ? "오답 노트에 넣었어요" : "헷갈렸어요 · 오답 노트에 넣기";
+    $("skipBtn").classList.toggle("hidden", !(answered && tab === "seonji"));
 
     renderStats(st, hideEra ? null : q.era);
   }
@@ -999,7 +1033,7 @@
     var rate = st.solved ? Math.round((st.correct / st.solved) * 100) : null;
     $("statSolved").textContent = st.solved;
     $("statBank").textContent = tab === "seonji"
-      ? (st.rounds ? st.rounds + 1 + "회독 " : "1회독 ") + readCount(st) + " / " + BANK_SIZE.seonji
+      ? (st.rounds ? st.rounds + 1 + "회독 " : "1회독 ") + readCount(st) + " / " + roundTotal(st) + ((st.skip || []).length ? " (버림 " + st.skip.length + ")" : "")
       : "전체 " + BANK_SIZE[tab] + "문항";
     $("statRate").textContent = rate === null ? "–" : rate + "%";
     var ring = $("ringFg");

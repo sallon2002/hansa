@@ -1033,7 +1033,7 @@
     var rate = st.solved ? Math.round((st.correct / st.solved) * 100) : null;
     $("statSolved").textContent = st.solved;
     $("statBank").textContent = tab === "seonji"
-      ? (st.rounds ? st.rounds + 1 + "회독 " : "1회독 ") + readCount(st) + " / " + roundTotal(st) + ((st.skip || []).length ? " (버림 " + st.skip.length + ")" : "")
+      ? (st.rounds ? st.rounds + 1 + "회독 " : "1회독 ") + (readCount(st) + (st.skip || []).length) + " / " + BANK_SIZE.seonji
       : "전체 " + BANK_SIZE[tab] + "문항";
     $("statRate").textContent = rate === null ? "–" : rate + "%";
     var ring = $("ringFg");

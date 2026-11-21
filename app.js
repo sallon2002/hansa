@@ -79,9 +79,9 @@
     },
     king: {
       eyebrow: "Korean History · 왕 맞추기",
-      headline: "이 왕이 한 일, 안 한 일",
-      leadKey: "왕 이름을 보고 그 왕의 업적인 선지(또는 아닌 선지)를 고릅니다. 보기는 풀 때마다 바뀌어요. 1~4 로 고르고 Enter 로 다음 문제.",
-      leadTouch: "왕 이름을 보고 그 왕의 업적인 선지(또는 아닌 선지)를 고릅니다. 보기는 풀 때마다 바뀌어요.",
+      headline: "이 왕 때의 일, 아닌 일",
+      leadKey: "왕 이름을 보고 그 왕 때의 업적·사건인 선지(또는 아닌 선지)를 고릅니다. 보기는 풀 때마다 바뀌어요. 1~4 로 고르고 Enter 로 다음 문제.",
+      leadTouch: "왕 이름을 보고 그 왕 때의 업적·사건인 선지(또는 아닌 선지)를 고릅니다. 보기는 풀 때마다 바뀌어요.",
       stats: "왕 맞추기",
     },
   };
@@ -311,12 +311,12 @@
       id: id,
       tab: "king",
       era: k.era,
-      q: who + "\n" + (row.m === "is" ? "이 왕의 업적으로 옳은 것은?" : "이 왕의 업적이 __아닌__ 것은?"),
+      q: who + "\n" + (row.m === "is" ? "이 왕 때의 일로 옳은 것은?" : "이 왕 때의 일이 __아닌__ 것은?"),
       choices: items.map(function (it) { return it.text; }),
       answer: items.findIndex(function (it) { return it.ans; }),
       notes: items.map(function (it) {
-        if (it.king === k) return row.m === "is" ? "맞다 — " + k.name + "의 업적이다." : k.name + "의 업적이 맞다.";
-        return kingLabel(it.king) + " 때의 일이다" + (row.m === "not" ? " — " + k.name + "의 업적이 아니다." : ".");
+        if (it.king === k) return row.m === "is" ? "맞다 — " + k.name + " 때의 일이다." : k.name + " 때의 일이 맞다.";
+        return kingLabel(it.king) + " 때의 일이다" + (row.m === "not" ? " — " + k.name + " 때의 일이 아니다." : ".");
       }),
     };
   }

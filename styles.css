@@ -2145,7 +2145,8 @@ button:disabled {
 
 /* ---------- 모의고사 (한국사): 회차별 PDF 내려받기 ---------- */
 [data-subject="invest"] .tab-mock,
-[data-subject="invest"] .tab-seonji {
+[data-subject="invest"] .tab-seonji,
+[data-subject="invest"] .tab-king {
   display: none;
 }
 .mock {
@@ -2209,4 +2210,12 @@ body.show-mock .dock {
   margin-left: auto;
   font-size: 0.72rem;
   opacity: 0.7;
+}
+
+/* 한국사 탭이 다섯 개라 좁은 휴대폰에서는 탭 여백을 줄여 한 줄에 맞춘다 */
+@media (max-width: 420px) {
+  #tabSeg .tab {
+    padding: 0.4rem 0.48rem;
+    font-size: 0.74rem;
+  }
 }

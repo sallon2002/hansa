@@ -1,6 +1,6 @@
 // 한국사 1급 문제 풀이 — 화면 동작 전부.
 // 개념 문제는 data/*.js 가 window.BANK 에, 실전 문제는 data/exam/*.js 가 window.EXAM 에,
-// 선지 선별(한국사)은 data/seonji/*.js 가 window.SEONJI 에 올려 둔다.
+// 선지 선별(한국사)은 data/seonji/*.js 가 window.SEONJI 에, 왕 맞추기(한국사)는 data/king.js 가 window.KINGS 에 올려 둔다.
 (function () {
   "use strict";
 
@@ -8,6 +8,7 @@
   var BANK = window.BANK || {};
   var EXAM = window.EXAM || {};
   var SEONJI = window.SEONJI || {};
+  var KINGS = window.KINGS || [];
   // 과목: index.html 이 주소(?s=invest)를 보고 정해 둔다. 과목마다 문제·기록·기록 옮기기 코드가 따로다
   var SUBJECT = window.SUBJECT === "invest" ? "invest" : "hansa";
   var IS_INVEST = SUBJECT === "invest";
@@ -76,6 +77,13 @@
       leadTouch: "시험에 자주 나오는 선지 한 줄을 보고 해당하는 시대·왕·나라·기구를 네 보기 중에서 고릅니다.",
       stats: "선지 선별",
     },
+    king: {
+      eyebrow: "Korean History · 왕 맞추기",
+      headline: "이 왕이 한 일, 안 한 일",
+      leadKey: "왕 이름을 보고 그 왕의 업적인 선지(또는 아닌 선지)를 고릅니다. 보기는 풀 때마다 바뀌어요. 1~4 로 고르고 Enter 로 다음 문제.",
+      leadTouch: "왕 이름을 보고 그 왕의 업적인 선지(또는 아닌 선지)를 고릅니다. 보기는 풀 때마다 바뀌어요.",
+      stats: "왕 맞추기",
+    },
   };
 
   var ICONS = {
@@ -124,13 +132,22 @@
   }
 
   // ---------- 문제 은행 ----------
-  var BANK_SIZE = { concept: 0, exam: 0, seonji: 0 };
+  // 왕 맞추기 문제 은행: 시대마다 [{k: 왕 번호, d: 업적 번호, m: "is"(옳은 것) | "not"(아닌 것)}].
+  // 보기는 build 때 고른다. 순서는 data/king.js 순서 그대로라 거기에는 덧붙이기만 한다(오답 노트 id)
+  var KBANK = {};
+  KINGS.forEach(function (k, ki) {
+    var rows = KBANK[k.era] || (KBANK[k.era] = []);
+    k.deeds.forEach(function (d, di) { rows.push({ k: ki, d: di, m: "is" }); });
+    if (k.deeds.length >= 3) k.deeds.forEach(function (d, di) { rows.push({ k: ki, d: di, m: "not" }); });
+  });
+  var BANK_SIZE = { concept: 0, exam: 0, seonji: 0, king: 0 };
   ERAS.forEach(function (e) {
     BANK_SIZE.concept += (BANK[e.id] || []).length;
     BANK_SIZE.exam += (EXAM[e.id] || []).length;
     BANK_SIZE.seonji += (SEONJI[e.id] || []).length;
+    BANK_SIZE.king += (KBANK[e.id] || []).length;
   });
-  function bankOf(tab) { return tab === "exam" ? EXAM : tab === "seonji" ? SEONJI : BANK; }
+  function bankOf(tab) { return tab === "exam" ? EXAM : tab === "seonji" ? SEONJI : tab === "king" ? KBANK : BANK; }
   /** id 는 "시대:줄번호" */
   function rowOf(tab, id) {
     var p = id.split(":");
@@ -180,7 +197,7 @@
     return BANK_SIZE.seonji - (st.skip || []).length;
   }
   function loadStats() {
-    var out = { concept: emptyStats(), exam: emptyStats(), seonji: emptyStats() };
+    var out = { concept: emptyStats(), exam: emptyStats(), seonji: emptyStats(), king: emptyStats() };
     try {
       var raw = localStorage.getItem(STORE_KEY);
       if (raw) {
@@ -188,6 +205,7 @@
         out.concept = cleanStats(v2.concept, "concept");
         out.exam = cleanStats(v2.exam, "exam");
         out.seonji = cleanStats(v2.seonji, "seonji");
+        out.king = cleanStats(v2.king, "king");
         return out;
       }
       // 두 탭이 생기기 전 기록은 개념 문제 기록으로 이어받는다
@@ -252,8 +270,58 @@
       answer: order.indexOf(q.answer),
     };
   }
+  /** 왕 맞추기: 그 왕의 업적 + 다른 왕(같은 나라 먼저)의 업적으로 보기 넷을 그때그때 고른다 */
+  function kingLabel(k) { return k.name + "(" + k.nation + ")"; }
+  function foreignDeeds(k, n) {
+    var tiers = [
+      KINGS.filter(function (o) { return o !== k && o.nation === k.nation; }),
+      KINGS.filter(function (o) { return o !== k && o.nation !== k.nation && o.era === k.era; }),
+      KINGS.filter(function (o) { return o !== k && o.nation !== k.nation && o.era !== k.era; }),
+    ];
+    var out = [], usedKing = {};
+    for (var t = 0; t < tiers.length && out.length < n; t++) {
+      // 한 왕에서 하나씩 — 같은 왕의 문장이 두 개 섞이지 않게
+      var pool = shuffle(tiers[t]);
+      for (var i = 0; i < pool.length && out.length < n; i++) {
+        var o = pool[i];
+        if (usedKing[o.name + o.nation]) continue;
+        usedKing[o.name + o.nation] = true;
+        out.push({ text: o.deeds[Math.floor(Math.random() * o.deeds.length)], king: o });
+      }
+    }
+    return out;
+  }
+  function buildKing(id) {
+    var row = rowOf("king", id);
+    if (!row) return null;
+    var k = KINGS[row.k];
+    var items;
+    if (row.m === "is") {
+      items = [{ text: k.deeds[row.d], king: k, ans: true }].concat(foreignDeeds(k, 3));
+    } else {
+      var mine = [row.d].concat(shuffle(k.deeds.map(function (d, i) { return i; }).filter(function (i) { return i !== row.d; })).slice(0, 2));
+      items = mine.map(function (i) { return { text: k.deeds[i], king: k }; });
+      var f = foreignDeeds(k, 1)[0];
+      f.ans = true;
+      items.push(f);
+    }
+    items = shuffle(items);
+    var who = k.nation + " " + k.name;
+    return {
+      id: id,
+      tab: "king",
+      era: k.era,
+      q: who + "\n" + (row.m === "is" ? "이 왕의 업적으로 옳은 것은?" : "이 왕의 업적이 __아닌__ 것은?"),
+      choices: items.map(function (it) { return it.text; }),
+      answer: items.findIndex(function (it) { return it.ans; }),
+      notes: items.map(function (it) {
+        if (it.king === k) return row.m === "is" ? "맞다 — " + k.name + "의 업적이다." : k.name + "의 업적이 맞다.";
+        return kingLabel(it.king) + " 때의 일이다" + (row.m === "not" ? " — " + k.name + "의 업적이 아니다." : ".");
+      }),
+    };
+  }
   function build(tab, id) {
-    return tab === "exam" ? buildExam(id) : buildConcept(id, tab);
+    return tab === "exam" ? buildExam(id) : tab === "king" ? buildKing(id) : buildConcept(id, tab);
   }
   /** 출제 비중대로 시대를 하나 고른다 — 그 탭에 문제가 있는 시대만 */
   function pickEra(tab) {
@@ -268,7 +336,7 @@
     return pool[pool.length - 1].id;
   }
   /** 탭·시대마다 이번에 이미 낸 줄 번호. 다 돌면 비우고 다시 돈다 */
-  var seen = { concept: {}, exam: {}, seonji: {} };
+  var seen = { concept: {}, exam: {}, seonji: {}, king: {} };
   function nextId(tab, prevId) {
     var st = stats[tab];
     if (modes[tab] === "wrong" && st.wrong.length) {
@@ -336,7 +404,7 @@
   // ---------- 상태 ----------
   var stats = loadStats();
   var tab = "concept";
-  var modes = { concept: "all", exam: "all", seonji: "all" };
+  var modes = { concept: "all", exam: "all", seonji: "all", king: "all" };
   var current = null;
   var picked = null;
   var count = 0;
@@ -577,9 +645,9 @@
       var s = JSON.parse(decodeURIComponent(escape(atob(t.slice(prefix.length)))));
       if (typeof s !== "object" || !s) return null;
       // 예전 코드(개념 문제만)는 개념 기록만 바꾸고 실전 기록은 둔다
-      if (prefix === OLD_PREFIX) return { concept: cleanStats(s, "concept"), exam: stats.exam, seonji: stats.seonji };
+      if (prefix === OLD_PREFIX) return { concept: cleanStats(s, "concept"), exam: stats.exam, seonji: stats.seonji, king: stats.king };
       // 선지 선별이 생기기 전 코드에는 seonji 가 없다 — 그 기록은 이 기기 것을 둔다
-      return { concept: cleanStats(s.concept, "concept"), exam: cleanStats(s.exam, "exam"), seonji: s.seonji ? cleanStats(s.seonji, "seonji") : stats.seonji };
+      return { concept: cleanStats(s.concept, "concept"), exam: cleanStats(s.exam, "exam"), seonji: s.seonji ? cleanStats(s.seonji, "seonji") : stats.seonji, king: s.king ? cleanStats(s.king, "king") : stats.king };
     } catch (e) {
       return null;
     }
@@ -855,7 +923,7 @@
       ? "투자자산운용사 세부과목 출제 비중(100문항 기준)대로 개념 " + BANK_SIZE.concept + "문항 · 실전 " + BANK_SIZE.exam +
         "문항 중 랜덤 출제 · 문제는 출제 범위를 바탕으로 새로 쓴 것입니다 · 기록은 이 브라우저에만 저장됩니다"
       : "한국사능력검정 심화 출제 비중으로 구석기 ~ 노무현 정부 범위에서 개념 " + BANK_SIZE.concept + "문항 · 실전 " + BANK_SIZE.exam +
-        "문항 중 랜덤 출제 · 선지 선별 " + BANK_SIZE.seonji + "문항 · 기록은 이 브라우저에만 저장됩니다";
+        "문항 중 랜덤 출제 · 선지 선별 " + BANK_SIZE.seonji + "문항 · 왕 맞추기 " + KINGS.length + "명 · 기록은 이 브라우저에만 저장됩니다";
     $("eraHeadTitle").textContent = IS_INVEST ? "세부과목별" : "시대별";
     document.querySelectorAll("[data-subject]").forEach(function (el) {
       var on = el.getAttribute("data-subject") === SUBJECT;

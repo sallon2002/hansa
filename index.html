@@ -75,6 +75,7 @@
             <button class="tab" role="tab" data-tab="exam">실전 문제</button>
             <button class="tab tab-mock" role="tab" data-tab="mock">모의고사</button>
             <button class="tab tab-seonji" role="tab" data-tab="seonji">선지 선별</button>
+            <button class="tab tab-king" role="tab" data-tab="king">왕 맞추기</button>
           </nav>
           <nav class="seg seg-modes" id="modeSeg" role="tablist" aria-label="출제 방식">
             <span class="seg-slider" aria-hidden="true"></span>
@@ -229,7 +230,7 @@
     <!-- 문제 은행: 과목에 따라 골라 읽는다. 새 문제는 각 파일 맨 아래에 덧붙인다 (줄 순서가 오답 노트 id) -->
     <script>
       (function () {
-        var v = "?v=20261119b";
+        var v = "?v=20261121b";
         var files;
         if (window.SUBJECT === "invest") {
           var ids = ["tax", "products", "realestate", "alt", "global", "analysis", "risk", "ethics", "law", "kofia", "equity", "bond", "deriv", "perf", "macro", "portfolio"];
@@ -242,6 +243,7 @@
             .concat(eras.map(function (id) { return "data/" + id + ".js"; }))
             .concat(eras.map(function (id) { return "data/exam/" + id + ".js"; }))
             .concat(eras.map(function (id) { return "data/seonji/" + id + ".js"; }))
+            .concat(["data/king.js"])
             .concat(["data/mock.js"]);
         }
         files.push("app.js");

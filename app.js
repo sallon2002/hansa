@@ -1045,6 +1045,14 @@
     $("eraChip").textContent = hideEra ? "선지" : era.label;
     $("qSub").textContent = hideEra ? "" : tab === "exam" && q.points ? (q.source.kind + " · " + q.points + "점") : era.range;
     $("wrongModeChip").classList.toggle("hidden", modes[tab] !== "wrong");
+    // 기출 선지: 같은 사실이 76~80회에 몇 번 나왔는지 (답을 알려 주지 않으니 고르기 전에도 보인다)
+    var cc = $("countChip");
+    cc.classList.toggle("hidden", tab !== "gichul");
+    if (tab === "gichul") {
+      var times = (window.GICHUL_COUNT || {})[q.id] || 1;
+      cc.textContent = times + "회 출제";
+      cc.classList.toggle("is-hot", times >= 4);
+    }
     $("qNo").textContent = "No. " + count;
 
     // 자료 (실전만)

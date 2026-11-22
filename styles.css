@@ -2237,3 +2237,10 @@ body.show-mock .dock {
     white-space: nowrap;
   }
 }
+
+/* 기출 선지: 4회 이상 나온 선지는 눈에 띄게 */
+#countChip.is-hot {
+  color: #fff;
+  background: var(--seal);
+  box-shadow: none;
+}

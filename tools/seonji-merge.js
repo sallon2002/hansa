@@ -11,6 +11,7 @@ const SET = process.argv.includes("--set") ? process.argv[process.argv.indexOf("
 const WORK = path.join(ROOT, "work", SET);
 const OUT = path.join(ROOT, "data", SET);
 const GLOBAL = SET === "gichul" ? "GICHUL" : "SEONJI";
+const MIN_TIMES = 3; // 기출 선지: 이 횟수 이상 나온 선지만 (tools/gichul-count.js 와 같게)
 global.window = {};
 require(path.join(ROOT, "data", "eras.js"));
 const ERAS = window.ERAS;
@@ -75,13 +76,13 @@ if (cmd === "check") {
   const checked = checkFiles(allWork());
   const bad = checked.bad;
   let items = checked.items;
-  // 기출 선지는 76~80회에 2번 이상 나온 사실만 싣는다 (work/gichul/repeats.json — tools/gichul-count.js 와 같은 기준)
+  // 기출 선지는 76~80회에 MIN_TIMES 번 이상 나온 사실만 싣는다 (work/gichul/repeats.json — tools/gichul-count.js 와 같은 기준)
   const rep = path.join(WORK, "repeats.json");
   if (SET === "gichul" && fs.existsSync(rep)) {
     const many = new Set();
-    for (const g of JSON.parse(fs.readFileSync(rep, "utf8"))) if (g.count >= 2) g.srcs.forEach((s) => many.add(s));
+    for (const g of JSON.parse(fs.readFileSync(rep, "utf8"))) if (g.count >= MIN_TIMES) g.srcs.forEach((s) => many.add(s));
     items = items.filter((it) => many.has(it.src));
-    console.log(`  2회 이상 나온 선지만: ${items.length}문항`);
+    console.log(`  ${MIN_TIMES}회 이상 나온 선지만: ${items.length}문항`);
   }
   if (bad) { console.log("형식 오류가 있어 만들지 않음"); process.exit(1); }
   fs.mkdirSync(OUT, { recursive: true });

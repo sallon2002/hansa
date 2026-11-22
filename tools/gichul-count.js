@@ -3,6 +3,7 @@
 const fs = require("fs");
 const path = require("path");
 const ROOT = path.join(__dirname, "..");
+const MIN_TIMES = 3; // tools/seonji-merge.js 와 같게
 const WORK = path.join(ROOT, "work", "gichul");
 const files = fs.readdirSync(WORK).filter((f) => /^r\d+\.json$/.test(f)).sort((a, b) => parseInt(a) - parseInt(b) || a.localeCompare(b));
 const groups = JSON.parse(fs.readFileSync(path.join(WORK, "repeats.json"), "utf8"));
@@ -11,11 +12,11 @@ for (const g of groups) for (const s of g.srcs) countBySrc[s] = Math.max(countBy
 const idx = {}, out = {};
 for (const f of files) {
   for (const it of JSON.parse(fs.readFileSync(path.join(WORK, f), "utf8")).items) {
-    if (!(countBySrc[it.src] > 1)) continue; // 1번만 나온 선지는 싣지 않는다 (seonji-merge 와 같은 기준)
+    if (!(countBySrc[it.src] >= MIN_TIMES)) continue; // 적게 나온 선지는 싣지 않는다 (seonji-merge 와 같은 기준)
     const i = (idx[it.era] = (idx[it.era] === undefined ? 0 : idx[it.era] + 1));
     out[it.era + ":" + i] = countBySrc[it.src];
   }
 }
 fs.writeFileSync(path.join(ROOT, "data", "gichul-count.js"),
   "// 기출 선지: 같은 사실이 76~80회에 몇 번 나왔나 (없으면 1번). tools/gichul-count.js 가 만든다\nwindow.GICHUL_COUNT = " + JSON.stringify(out) + ";\n");
-console.log("2회 이상 문항 " + Object.keys(out).length + "개 → data/gichul-count.js");
+console.log(MIN_TIMES + "회 이상 문항 " + Object.keys(out).length + "개 → data/gichul-count.js");

@@ -11,8 +11,9 @@ for (const g of groups) for (const s of g.srcs) countBySrc[s] = Math.max(countBy
 const idx = {}, out = {};
 for (const f of files) {
   for (const it of JSON.parse(fs.readFileSync(path.join(WORK, f), "utf8")).items) {
+    if (!(countBySrc[it.src] > 1)) continue; // 1번만 나온 선지는 싣지 않는다 (seonji-merge 와 같은 기준)
     const i = (idx[it.era] = (idx[it.era] === undefined ? 0 : idx[it.era] + 1));
-    if (countBySrc[it.src] > 1) out[it.era + ":" + i] = countBySrc[it.src];
+    out[it.era + ":" + i] = countBySrc[it.src];
   }
 }
 fs.writeFileSync(path.join(ROOT, "data", "gichul-count.js"),

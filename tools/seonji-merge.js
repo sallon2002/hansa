@@ -72,7 +72,17 @@ if (cmd === "check") {
     console.log("data/seonji 가 이미 있다. 사이트에 올린 뒤라면 줄을 빼거나 순서를 바꾸지 말 것 — 정말 다시 만들려면 --force");
     process.exit(1);
   }
-  const { items, bad } = checkFiles(allWork());
+  const checked = checkFiles(allWork());
+  const bad = checked.bad;
+  let items = checked.items;
+  // 기출 선지는 76~80회에 2번 이상 나온 사실만 싣는다 (work/gichul/repeats.json — tools/gichul-count.js 와 같은 기준)
+  const rep = path.join(WORK, "repeats.json");
+  if (SET === "gichul" && fs.existsSync(rep)) {
+    const many = new Set();
+    for (const g of JSON.parse(fs.readFileSync(rep, "utf8"))) if (g.count >= 2) g.srcs.forEach((s) => many.add(s));
+    items = items.filter((it) => many.has(it.src));
+    console.log(`  2회 이상 나온 선지만: ${items.length}문항`);
+  }
   if (bad) { console.log("형식 오류가 있어 만들지 않음"); process.exit(1); }
   fs.mkdirSync(OUT, { recursive: true });
   for (const e of ERAS) {

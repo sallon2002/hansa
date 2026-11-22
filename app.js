@@ -9,6 +9,7 @@
   var EXAM = window.EXAM || {};
   var SEONJI = window.SEONJI || {};
   var KINGS = window.KINGS || [];
+  var GICHUL = window.GICHUL || {};
   // 과목: index.html 이 주소(?s=invest)를 보고 정해 둔다. 과목마다 문제·기록·기록 옮기기 코드가 따로다
   var SUBJECT = window.SUBJECT === "invest" ? "invest" : "hansa";
   var IS_INVEST = SUBJECT === "invest";
@@ -84,6 +85,13 @@
       leadTouch: "왕 이름을 보고 그 왕 때의 업적·사건인 선지(또는 아닌 선지)를 고릅니다. 보기는 풀 때마다 바뀌어요.",
       stats: "왕 맞추기",
     },
+    gichul: {
+      eyebrow: "Korean History · 기출 선지",
+      headline: "실제 시험에 나온 선지만",
+      leadKey: "최근 기출 문제지의 보기 하나하나를 4지선다로 바꿨습니다. 선지를 보고 해당하는 시대·왕·나라·사건을 고르세요. 해설에 몇 회 몇 번인지 나와요.",
+      leadTouch: "최근 기출 보기 하나하나를 4지선다로 바꿨습니다. 해설에 몇 회 몇 번인지 나와요.",
+      stats: "기출 선지",
+    },
   };
 
   var ICONS = {
@@ -140,14 +148,15 @@
     k.deeds.forEach(function (d, di) { rows.push({ k: ki, d: di, m: "is" }); });
     if (k.deeds.length >= 3) k.deeds.forEach(function (d, di) { rows.push({ k: ki, d: di, m: "not" }); });
   });
-  var BANK_SIZE = { concept: 0, exam: 0, seonji: 0, king: 0 };
+  var BANK_SIZE = { concept: 0, exam: 0, seonji: 0, king: 0, gichul: 0 };
   ERAS.forEach(function (e) {
     BANK_SIZE.concept += (BANK[e.id] || []).length;
     BANK_SIZE.exam += (EXAM[e.id] || []).length;
     BANK_SIZE.seonji += (SEONJI[e.id] || []).length;
     BANK_SIZE.king += (KBANK[e.id] || []).length;
+    BANK_SIZE.gichul += (GICHUL[e.id] || []).length;
   });
-  function bankOf(tab) { return tab === "exam" ? EXAM : tab === "seonji" ? SEONJI : tab === "king" ? KBANK : BANK; }
+  function bankOf(tab) { return tab === "exam" ? EXAM : tab === "seonji" ? SEONJI : tab === "king" ? KBANK : tab === "gichul" ? GICHUL : BANK; }
   /** id 는 "시대:줄번호" */
   function rowOf(tab, id) {
     var p = id.split(":");
@@ -162,21 +171,21 @@
   function cleanStats(s, tab) {
     s = Object.assign(emptyStats(), s || {});
     s.wrong = (Array.isArray(s.wrong) ? s.wrong : []).filter(function (id) { return typeof id === "string" && !!rowOf(tab, id); });
-    if (tab === "seonji") {
+    if (isDrill(tab)) {
       // 1회독 진도: 시대마다 이번 바퀴에 푼 줄 번호. 기록에 남아 앱을 다시 열어도 이어서 낸다
       var read = {};
       var r = s.read && typeof s.read === "object" ? s.read : {};
       Object.keys(r).forEach(function (era) {
-        var rows = SEONJI[era];
+        var rows = bankOf(tab)[era];
         if (!rows || !Array.isArray(r[era])) return;
         var ok = r[era].filter(function (i, k, a) { return i >= 0 && i < rows.length && a.indexOf(i) === k; });
         if (ok.length) read[era] = ok;
       });
       s.read = read;
       s.rounds = s.rounds > 0 ? Math.floor(s.rounds) : 0;
-      s.skip = (Array.isArray(s.skip) ? s.skip : []).filter(function (id, k, a) { return typeof id === "string" && !!rowOf("seonji", id) && a.indexOf(id) === k; });
+      s.skip = (Array.isArray(s.skip) ? s.skip : []).filter(function (id, k, a) { return typeof id === "string" && !!rowOf(tab, id) && a.indexOf(id) === k; });
       s.again = (Array.isArray(s.again) ? s.again : []).filter(function (a) {
-        return a && typeof a.id === "string" && !!rowOf("seonji", a.id) && (a.step === 1 || a.step === 2) && typeof a.at === "number";
+        return a && typeof a.id === "string" && !!rowOf(tab, a.id) && (a.step === 1 || a.step === 2) && typeof a.at === "number";
       });
     }
     return s;
@@ -193,11 +202,13 @@
       return n + st.read[era].filter(function (i) { return !sk[era + ":" + i]; }).length;
     }, 0);
   }
-  function roundTotal(st) {
-    return BANK_SIZE.seonji - (st.skip || []).length;
+  function roundTotal(st, t) {
+    return BANK_SIZE[t] - (st.skip || []).length;
   }
+  /** 1회독·다시 보기·버리기를 쓰는 탭: 선지 선별, 기출 선지 */
+  function isDrill(t) { return t === "seonji" || t === "gichul"; }
   function loadStats() {
-    var out = { concept: emptyStats(), exam: emptyStats(), seonji: emptyStats(), king: emptyStats() };
+    var out = { concept: emptyStats(), exam: emptyStats(), seonji: emptyStats(), king: emptyStats(), gichul: emptyStats() };
     try {
       var raw = localStorage.getItem(STORE_KEY);
       if (raw) {
@@ -206,6 +217,7 @@
         out.exam = cleanStats(v2.exam, "exam");
         out.seonji = cleanStats(v2.seonji, "seonji");
         out.king = cleanStats(v2.king, "king");
+        out.gichul = cleanStats(v2.gichul, "gichul");
         return out;
       }
       // 두 탭이 생기기 전 기록은 개념 문제 기록으로 이어받는다
@@ -336,14 +348,14 @@
     return pool[pool.length - 1].id;
   }
   /** 탭·시대마다 이번에 이미 낸 줄 번호. 다 돌면 비우고 다시 돈다 */
-  var seen = { concept: {}, exam: {}, seonji: {}, king: {} };
+  var seen = { concept: {}, exam: {}, seonji: {}, king: {}, gichul: {} };
   function nextId(tab, prevId) {
     var st = stats[tab];
     if (modes[tab] === "wrong" && st.wrong.length) {
       var pool = st.wrong.length > 1 ? st.wrong.filter(function (id) { return id !== prevId; }) : st.wrong;
       return pool[Math.floor(Math.random() * pool.length)];
     }
-    if (tab === "seonji") return nextUnread(st, prevId);
+    if (isDrill(tab)) return nextUnread(st, prevId, tab);
     // 전체 랜덤에서도 오답 노트 문제가 아주 조금 더 자주 나온다: 다른 문제보다 약 1.2배.
     // 티 나지 않게 한 번에 붙는 확률은 6% 를 넘지 않는다. 맞히면 choose() 가 노트에서 지운다
     var wrongPool = st.wrong.filter(function (id) { return id !== prevId; });
@@ -362,7 +374,7 @@
   }
   /** 선지 선별 전체 랜덤: 이번 바퀴에 아직 안 푼 문항만, 시대 비중 없이 고르게. 오답 노트 문제도 끼우지 않는다.
    *  다 풀면 한 바퀴(rounds)를 올리고 처음부터 다시 돈다 */
-  function nextUnread(st, prevId) {
+  function nextUnread(st, prevId, t) {
     // 틀린 선지는 20문제 뒤, 그걸 맞히면 60문제 뒤에 다시 낸다 (st.again: {id, at: 몇 번째 풀이 뒤, step 1·2})
     var again = st.again || (st.again = []);
     var due = null;
@@ -375,23 +387,23 @@
     var sk = skipSet(st);
     var left = [];
     ERAS.forEach(function (e) {
-      var rows = SEONJI[e.id] || [];
+      var rows = bankOf(t)[e.id] || [];
       var done = {};
       (read[e.id] || []).forEach(function (i) { done[i] = true; });
       for (var i = 0; i < rows.length; i++) if (!done[i] && !sk[e.id + ":" + i] && e.id + ":" + i !== prevId) left.push(e.id + ":" + i);
     });
     if (left.length) return left[Math.floor(Math.random() * left.length)];
-    if (roundTotal(st) <= 0) return prevId || ERAS[0].id + ":0"; // 전부 버렸으면 더 낼 게 없다
+    if (roundTotal(st, t) <= 0) return prevId || ERAS[0].id + ":0"; // 전부 버렸으면 더 낼 게 없다
     // 1회독 끝: 틀린 게 남았으면(다시 보기 대기 중인 것 포함) 오답 노트로 넘어가 한 번씩 맞혀 비우고, 하나도 없으면 다음 바퀴
     st.again = [];
     if (st.wrong.length) {
-      modes.seonji = "wrong";
+      modes[t] = "wrong";
       notice = "전체 선지 1회독 완료! 남은 오답 " + st.wrong.length + "개를 바로 정리합니다. 한 번 맞히면 노트에서 빠져요.";
-      return nextId("seonji", prevId);
+      return nextId(t, prevId);
     }
     newRound(st);
     notice = "모든 선지를 다 맞혔어요! " + (st.rounds + 1) + "회독을 처음부터 시작합니다.";
-    return nextUnread(st, prevId);
+    return nextUnread(st, prevId, t);
   }
   function newRound(st) {
     st.read = {};
@@ -404,7 +416,7 @@
   // ---------- 상태 ----------
   var stats = loadStats();
   var tab = "concept";
-  var modes = { concept: "all", exam: "all", seonji: "all", king: "all" };
+  var modes = { concept: "all", exam: "all", seonji: "all", king: "all", gichul: "all" };
   var current = null;
   var picked = null;
   var count = 0;
@@ -441,7 +453,7 @@
     st.streak = ok ? st.streak + 1 : 0;
     st.best = Math.max(st.best, st.streak);
     var at = st.wrong.indexOf(current.id);
-    if (tab === "seonji" && modes.seonji === "all") {
+    if (isDrill(tab) && modes[tab] === "all") {
       // 선지 선별 1회독: 틀리면 20문제 뒤 → 맞히면 60문제 뒤 → 또 맞히면 오답 노트에서 뺀다. 중간에 틀리면 20문제 뒤부터 다시
       var again = st.again || (st.again = []);
       var ai = -1;
@@ -460,11 +472,11 @@
       if (ok && at >= 0) st.wrong.splice(at, 1);
       if (!ok && at < 0) st.wrong.push(current.id);
       // 오답 노트에서 맞혀 뺀 선지는 다시 보기 대기에서도 뺀다
-      if (tab === "seonji" && ok && stats.seonji.again) {
-        stats.seonji.again = stats.seonji.again.filter(function (a) { return a.id !== current.id; });
+      if (isDrill(tab) && ok && stats[tab].again) {
+        stats[tab].again = stats[tab].again.filter(function (a) { return a.id !== current.id; });
       }
     }
-    if (tab === "seonji") {
+    if (isDrill(tab)) {
       // 풀었으면(맞든 틀리든) 이번 바퀴에서는 다시 내지 않는다 — 틀린 건 오답 노트에서 따로 푼다
       var p = current.id.split(":");
       var rd = st.read || (st.read = {});
@@ -488,7 +500,7 @@
     if (st.correct > 0) st.correct--;
     st.streak = 0;
     if (st.wrong.indexOf(current.id) < 0) st.wrong.push(current.id);
-    if (tab === "seonji" && modes.seonji === "all") {
+    if (isDrill(tab) && modes[tab] === "all") {
       var again = (st.again || (st.again = [])).filter(function (a) { return a.id !== current.id; });
       again.push({ id: current.id, at: st.solved + 20, step: 1 });
       st.again = again;
@@ -499,8 +511,8 @@
 
   /** 버리기(선지 선별): 안 외울 선지 — 맞힌 것으로 치고, 오답 노트·다시 보기에서 빼고, 앞으로 다시 내지 않는다 */
   function markSkip() {
-    if (tab !== "seonji" || !current || picked === null) return;
-    var st = stats.seonji;
+    if (!isDrill(tab) || !current || picked === null) return;
+    var st = stats[tab];
     if (picked !== current.answer || unsureMarked) {
       var e = st.byEra[current.era] || (st.byEra[current.era] = { t: 0, c: 0 });
       e.c = Math.min(e.t, e.c + 1);
@@ -519,13 +531,13 @@
     // 오답 노트를 다 맞혀 비었으면 전체 랜덤으로 돌아간다
     if (modes[tab] === "wrong" && !stats[tab].wrong.length) {
       modes[tab] = "all";
-      if (tab === "seonji") {
-        var st = stats.seonji;
-        if (readCount(st) >= roundTotal(st)) {
+      if (isDrill(tab)) {
+        var st = stats[tab];
+        if (readCount(st) >= roundTotal(st, tab)) {
           newRound(st);
           notice = "오답 노트까지 모두 비웠어요! " + (st.rounds + 1) + "회독을 처음부터 시작합니다.";
         } else {
-          notice = "오답 노트를 모두 비웠어요! 남은 " + (roundTotal(st) - readCount(st)) + "개 선지로 돌아갑니다.";
+          notice = "오답 노트를 모두 비웠어요! 남은 " + (roundTotal(st, tab) - readCount(st)) + "개 선지로 돌아갑니다.";
         }
       }
     }
@@ -645,9 +657,9 @@
       var s = JSON.parse(decodeURIComponent(escape(atob(t.slice(prefix.length)))));
       if (typeof s !== "object" || !s) return null;
       // 예전 코드(개념 문제만)는 개념 기록만 바꾸고 실전 기록은 둔다
-      if (prefix === OLD_PREFIX) return { concept: cleanStats(s, "concept"), exam: stats.exam, seonji: stats.seonji, king: stats.king };
+      if (prefix === OLD_PREFIX) return { concept: cleanStats(s, "concept"), exam: stats.exam, seonji: stats.seonji, king: stats.king, gichul: stats.gichul };
       // 선지 선별이 생기기 전 코드에는 seonji 가 없다 — 그 기록은 이 기기 것을 둔다
-      return { concept: cleanStats(s.concept, "concept"), exam: cleanStats(s.exam, "exam"), seonji: s.seonji ? cleanStats(s.seonji, "seonji") : stats.seonji, king: s.king ? cleanStats(s.king, "king") : stats.king };
+      return { concept: cleanStats(s.concept, "concept"), exam: cleanStats(s.exam, "exam"), seonji: s.seonji ? cleanStats(s.seonji, "seonji") : stats.seonji, king: s.king ? cleanStats(s.king, "king") : stats.king, gichul: s.gichul ? cleanStats(s.gichul, "gichul") : stats.gichul };
     } catch (e) {
       return null;
     }
@@ -861,8 +873,16 @@
     if (!slider.classList.contains("is-ready")) requestAnimationFrame(function () { slider.classList.add("is-ready"); });
   }
   function updateSliders() {
-    slide("tabSeg", document.querySelector('[data-tab="' + (mockOn ? "mock" : tab) + '"]'));
+    var activeTab = document.querySelector('[data-tab="' + (mockOn ? "mock" : tab) + '"]');
+    slide("tabSeg", activeTab);
     slide("modeSeg", document.querySelector('[data-mode="' + modes[tab] + '"]'));
+    // 휴대폰에서 탭 줄이 옆으로 넘치면 고른 탭이 보이게 밀어 둔다
+    var seg = $("tabSeg");
+    if (activeTab && seg.scrollWidth > seg.clientWidth) {
+      var l = activeTab.offsetLeft, r = l + activeTab.offsetWidth;
+      if (l < seg.scrollLeft) seg.scrollLeft = l - 8;
+      else if (r > seg.scrollLeft + seg.clientWidth) seg.scrollLeft = r - seg.clientWidth + 8;
+    }
   }
 
   // ---------- 그리기 ----------
@@ -923,7 +943,7 @@
       ? "투자자산운용사 세부과목 출제 비중(100문항 기준)대로 개념 " + BANK_SIZE.concept + "문항 · 실전 " + BANK_SIZE.exam +
         "문항 중 랜덤 출제 · 문제는 출제 범위를 바탕으로 새로 쓴 것입니다 · 기록은 이 브라우저에만 저장됩니다"
       : "한국사능력검정 심화 출제 비중으로 구석기 ~ 노무현 정부 범위에서 개념 " + BANK_SIZE.concept + "문항 · 실전 " + BANK_SIZE.exam +
-        "문항 중 랜덤 출제 · 선지 선별 " + BANK_SIZE.seonji + "문항 · 왕 맞추기 " + KINGS.length + "명 · 기록은 이 브라우저에만 저장됩니다";
+        "문항 중 랜덤 출제 · 선지 선별 " + BANK_SIZE.seonji + "문항 · 왕 맞추기 " + KINGS.length + "명 · 기출 선지 " + BANK_SIZE.gichul + "문항 · 기록은 이 브라우저에만 저장됩니다";
     $("eraHeadTitle").textContent = IS_INVEST ? "세부과목별" : "시대별";
     document.querySelectorAll("[data-subject]").forEach(function (el) {
       var on = el.getAttribute("data-subject") === SUBJECT;
@@ -1020,7 +1040,7 @@
 
     var era = ERA_BY_ID[q.era];
     // 선지 선별은 「어느 시대·나라인가」를 묻는 문항이 많아, 시대 표시(칩·범위·색·기록 칸 강조)가 답을 알려 준다 — 고른 뒤에만 보인다
-    var hideEra = tab === "seonji" && !answered;
+    var hideEra = isDrill(tab) && !answered;
     document.documentElement.style.setProperty("--era", hideEra ? "var(--accent)" : ERA_COLOR[q.era] || "#d6a44f");
     $("eraChip").textContent = hideEra ? "선지" : era.label;
     $("qSub").textContent = hideEra ? "" : tab === "exam" && q.points ? (q.source.kind + " · " + q.points + "점") : era.range;
@@ -1092,7 +1112,7 @@
     ub.classList.toggle("hidden", !right);
     ub.disabled = unsureMarked;
     ub.textContent = unsureMarked ? "오답 노트에 넣었어요" : "헷갈렸어요 · 오답 노트에 넣기";
-    $("skipBtn").classList.toggle("hidden", !(answered && tab === "seonji"));
+    $("skipBtn").classList.toggle("hidden", !(answered && isDrill(tab)));
 
     renderStats(st, hideEra ? null : q.era);
   }
@@ -1100,8 +1120,8 @@
   function renderStats(st, currentEra) {
     var rate = st.solved ? Math.round((st.correct / st.solved) * 100) : null;
     $("statSolved").textContent = st.solved;
-    $("statBank").textContent = tab === "seonji"
-      ? (st.rounds ? st.rounds + 1 + "회독 " : "1회독 ") + (readCount(st) + (st.skip || []).length) + " / " + BANK_SIZE.seonji
+    $("statBank").textContent = isDrill(tab)
+      ? (st.rounds ? st.rounds + 1 + "회독 " : "1회독 ") + (readCount(st) + (st.skip || []).length) + " / " + BANK_SIZE[tab]
       : "전체 " + BANK_SIZE[tab] + "문항";
     $("statRate").textContent = rate === null ? "–" : rate + "%";
     var ring = $("ringFg");

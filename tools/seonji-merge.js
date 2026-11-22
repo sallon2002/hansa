@@ -6,8 +6,11 @@ const fs = require("fs");
 const path = require("path");
 
 const ROOT = path.join(__dirname, "..");
-const WORK = path.join(ROOT, "work", "seonji");
-const OUT = path.join(ROOT, "data", "seonji");
+// --set gichul 이면 기출 선지(work/gichul → data/gichul, window.GICHUL)
+const SET = process.argv.includes("--set") ? process.argv[process.argv.indexOf("--set") + 1] : "seonji";
+const WORK = path.join(ROOT, "work", SET);
+const OUT = path.join(ROOT, "data", SET);
+const GLOBAL = SET === "gichul" ? "GICHUL" : "SEONJI";
 global.window = {};
 require(path.join(ROOT, "data", "eras.js"));
 const ERAS = window.ERAS;
@@ -58,7 +61,7 @@ function checkFiles(files) {
   return { items, bad: errs.length };
 }
 
-const [cmd, ...rest] = process.argv.slice(2);
+const [cmd, ...rest] = process.argv.slice(2).filter((a, i, all) => a !== "--set" && all[i - 1] !== "--set");
 const allWork = () => (fs.existsSync(WORK) ? fs.readdirSync(WORK).filter((f) => /\.json$/.test(f)).sort((a, b) => parseInt(a) - parseInt(b) || a.localeCompare(b)).map((f) => path.join(WORK, f)) : []);
 
 if (cmd === "check") {
@@ -76,10 +79,10 @@ if (cmd === "check") {
     const rows = items.filter((it) => it.era === e.id).map((it) => it.row);
     fs.writeFileSync(
       path.join(OUT, `${e.id}.js`),
-      `// 선지 선별 · ${e.label} (${e.range})\n// 한 줄 = [문제, 정답, 오답1, 오답2, 오답3, 해설, 오답1 풀이, 오답2 풀이, 오답3 풀이]. 새 문제는 맨 아래에 덧붙인다.\n` +
-        `window.SEONJI = window.SEONJI || {};\nwindow.SEONJI.${e.id} = [\n` + rows.map((r) => "  " + JSON.stringify(r)).join(",\n") + "\n];\n",
+      `// ${SET === "gichul" ? "기출 선지" : "선지 선별"} · ${e.label} (${e.range})\n// 한 줄 = [문제, 정답, 오답1, 오답2, 오답3, 해설, 오답1 풀이, 오답2 풀이, 오답3 풀이]. 새 문제는 맨 아래에 덧붙인다.\n` +
+        `window.${GLOBAL} = window.${GLOBAL} || {};\nwindow.${GLOBAL}.${e.id} = [\n` + rows.map((r) => "  " + JSON.stringify(r)).join(",\n") + "\n];\n",
     );
-    console.log(`  data/seonji/${e.id}.js ${rows.length}문항`);
+    console.log(`  data/${SET}/${e.id}.js ${rows.length}문항`);
   }
 } else {
   console.log("node tools/seonji-merge.js check [파일...] | build [--force]");

@@ -11,7 +11,7 @@ const SET = process.argv.includes("--set") ? process.argv[process.argv.indexOf("
 const WORK = path.join(ROOT, "work", SET);
 const OUT = path.join(ROOT, "data", SET);
 const GLOBAL = SET === "gichul" ? "GICHUL" : "SEONJI";
-const MIN_TIMES = 3; // 기출 선지: 이 횟수 이상 나온 선지만 (tools/gichul-count.js 와 같게)
+const MIN_TIMES = 2; // 기출 선지: 이 횟수 이상 나온 선지만 (tools/gichul-count.js 와 같게)
 global.window = {};
 require(path.join(ROOT, "data", "eras.js"));
 const ERAS = window.ERAS;

@@ -76,24 +76,48 @@ if (cmd === "check") {
   const checked = checkFiles(allWork());
   const bad = checked.bad;
   let items = checked.items;
-  // 기출 선지는 76~80회에 MIN_TIMES 번 이상 나온 사실만 싣는다 (work/gichul/repeats.json — tools/gichul-count.js 와 같은 기준)
+  // 기출 선지: 76~80회에 MIN_TIMES 번 이상 나온 사실(work/gichul/repeats.json 의 묶음)만, 묶음마다 한 문항(중복 없이).
+  // 해설 앞 출처는 그 사실이 나온 회차·번호 전부로 바꾸고, 횟수는 data/gichul-count.js 에 쓴다
   const rep = path.join(WORK, "repeats.json");
+  const times = new Map();
   if (SET === "gichul" && fs.existsSync(rep)) {
-    const many = new Set();
-    for (const g of JSON.parse(fs.readFileSync(rep, "utf8"))) if (g.count >= MIN_TIMES) g.srcs.forEach((s) => many.add(s));
-    items = items.filter((it) => many.has(it.src));
-    console.log(`  ${MIN_TIMES}회 이상 나온 선지만: ${items.length}문항`);
+    const bySrc = new Map(items.map((it) => [it.src, it]));
+    const used = new Set();
+    const picked = [];
+    for (const g of JSON.parse(fs.readFileSync(rep, "utf8"))) {
+      if (g.count < MIN_TIMES) continue;
+      // 가장 최근 회차의 문항을 대표로 (다른 묶음이 이미 쓴 문항은 건너뜀)
+      const src = g.srcs.slice().reverse().find((x) => bySrc.has(x) && !used.has(x));
+      if (!src) { console.log("  ! 대표 문항 없음: " + g.fact); continue; }
+      used.add(src);
+      const it = bySrc.get(src);
+      const row = it.row.slice();
+      row[5] = "[" + g.srcs.join(" · ") + "] " + row[5].replace(/^\[[^\]]*\]\s*/, "");
+      const one = { ...it, row };
+      times.set(one, g.count);
+      picked.push(one);
+    }
+    items = picked;
+    console.log(`  ${MIN_TIMES}회 이상 나온 선지, 중복 없이: ${items.length}문항`);
   }
   if (bad) { console.log("형식 오류가 있어 만들지 않음"); process.exit(1); }
   fs.mkdirSync(OUT, { recursive: true });
+  const countMap = {};
   for (const e of ERAS) {
-    const rows = items.filter((it) => it.era === e.id).map((it) => it.row);
+    const its = items.filter((it) => it.era === e.id);
+    its.forEach((it, i) => { if (times.has(it)) countMap[e.id + ":" + i] = times.get(it); });
+    const rows = its.map((it) => it.row);
     fs.writeFileSync(
       path.join(OUT, `${e.id}.js`),
       `// ${SET === "gichul" ? "기출 선지" : "선지 선별"} · ${e.label} (${e.range})\n// 한 줄 = [문제, 정답, 오답1, 오답2, 오답3, 해설, 오답1 풀이, 오답2 풀이, 오답3 풀이]. 새 문제는 맨 아래에 덧붙인다.\n` +
         `window.${GLOBAL} = window.${GLOBAL} || {};\nwindow.${GLOBAL}.${e.id} = [\n` + rows.map((r) => "  " + JSON.stringify(r)).join(",\n") + "\n];\n",
     );
     console.log(`  data/${SET}/${e.id}.js ${rows.length}문항`);
+  }
+  if (SET === "gichul") {
+    fs.writeFileSync(path.join(ROOT, "data", "gichul-count.js"),
+      "// 기출 선지: 그 사실이 76~80회에 몇 번 나왔나. tools/seonji-merge.js build --set gichul 이 만든다\nwindow.GICHUL_COUNT = " + JSON.stringify(countMap) + ";\n");
+    console.log("  data/gichul-count.js");
   }
 } else {
   console.log("node tools/seonji-merge.js check [파일...] | build [--force]");
